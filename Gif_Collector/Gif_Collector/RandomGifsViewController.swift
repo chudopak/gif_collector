@@ -20,13 +20,14 @@ class RandomGifsViewController: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
-		
+
+		cell.selectionStyle = .none
 		cell.configureGifs()
 		return (cell)
 	}
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-		return (UIScreen.main.bounds.width / 2)
+		return (UIScreen.main.bounds.width / 2 + 5)
 	}
 }
 
