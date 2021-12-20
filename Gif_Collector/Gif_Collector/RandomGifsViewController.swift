@@ -6,45 +6,103 @@
 //
 
 import UIKit
+import Dispatch
 
 class RandomGifsViewController: UITableViewController {
 
-	var json: String?
-	var gifURL = ""
+//	var json: String?
+//	var gifURL = ""
 
 	static private var gifArray = [Data]()
 	static private var isFirstLoad = true
+	static private var gifArraySize = 0
+	
+	private let _semaphoreArray = DispatchSemaphore(value: 1)
+	private let _semaphoreThreads = DispatchSemaphore(value: 4)
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
 		if (RandomGifsViewController.isFirstLoad) {
+			_semaphoreArray.wait()
 			RandomGifsViewController.gifArray.reserveCapacity(50)
 			RandomGifsViewController.isFirstLoad = false
-			for i in 0..<15 {
-				json = _getJSONData()
-				if let json = json {
-					if let url = _parseGifURLFromJSON(json: json) {
-						gifURL = url
-						print(url)
-					} else {
-						print("SHit")
-					}
-				}
-			}
+			_semaphoreArray.signal()
+			_loadFirstGifs()
+			_semaphoreArray.wait()
+			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+			_semaphoreArray.signal()
+//			DispatchQueue.global().async {
+//				sleep(15)
+//				print(RandomGifsViewController.gifArray.count)
+//			}
+//
+//			print(RandomGifsViewController.gifArray.count)
 		}
 	}
 
 	
+	private func _loadFirstGifs() {
+		for i in 0..<15 {
+			self._semaphoreThreads.wait()
+			DispatchQueue.global(qos: .userInitiated).async {
+				guard let json = self._getJSONData() else {
+					return
+				}
+				guard let url = self._parseGifURLFromJSON(json: json) else {
+					return
+				}
+				guard let gifURL = URL(string: url) else {
+					return
+				}
+				guard let data = try? Data(contentsOf: gifURL) else {
+					return
+				}
+				
+				self._semaphoreArray.wait()
+				RandomGifsViewController.gifArray.append(data)
+				self._semaphoreArray.signal()
+				if (i % 3 == 0) {
+					self._semaphoreArray.wait()
+					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+					self._semaphoreArray.signal()
+					DispatchQueue.main.async {
+						self.tableView.reloadData()
+					}
+				}
+			}
+			self._semaphoreThreads.signal()
+		}
+	}
+	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		return (3)
+		print("NB ROW CALLEd")
+		if (RandomGifsViewController.gifArraySize < 10) {
+			return (5)
+		}
+		return (RandomGifsViewController.gifArraySize / 2)
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
 
 		cell.selectionStyle = .none
-		cell.configureGifs(gifURL: gifURL)
+
+		var leftGif: Data?
+		var rightGif: Data?
+		_semaphoreArray.wait()
+		if (indexPath.row * 2 < RandomGifsViewController.gifArray.count) {
+			leftGif = RandomGifsViewController.gifArray[indexPath.row * 2]
+		}
+		if (indexPath.row * 2 + 1 < RandomGifsViewController.gifArray.count) {
+			rightGif = RandomGifsViewController.gifArray[indexPath.row * 2 + 1]
+		}
+		_semaphoreArray.signal()
+
+		cell.configureGifs(leftGif: leftGif,
+						   rightGif: rightGif,
+						   semaphoreThreads: _semaphoreThreads)
+//		print(indexPath.row)
 		return (cell)
 	}
 	
@@ -104,7 +162,6 @@ class RandomGifsViewController: UITableViewController {
 			print("Expectred 'images' dictionary")
 			return (nil)
 		}
-//		print(images)
 		
 		guard let original = images["original"] as? [String: Any] else {
 			print("Expectred 'original' dictionary")

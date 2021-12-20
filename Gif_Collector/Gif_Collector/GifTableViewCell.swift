@@ -8,6 +8,7 @@
 import UIKit
 import Gifu
 
+
 class GifTableViewCell: UITableViewCell {
 	
 	var gif = ""
@@ -63,19 +64,28 @@ class GifTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 	
-	public func configureGifs(gifURL: String) {
+	public func configureGifs(leftGif: Data?, rightGif: Data?, semaphoreThreads: DispatchSemaphore ) {
 		leftView.addSubview(leftGifImageView)
 		rightView.addSubview(rightGifImageView)
 		contentView.addSubview(rightView)
 		contentView.addSubview(leftView)
 		setAndActivateConstraints()
 
-		gif = gifURL
-		let gifURL = URL(string: gif)!
-		if let data = try? Data(contentsOf: gifURL) {
-			leftGifImageView.animate(withGIFData: data)
+		semaphoreThreads.wait()
+		if let leftGif = leftGif {
+			leftGifImageView.animate(withGIFData: leftGif)
+		} else {
+			leftGifImageView.animate(withGIFNamed: "giphy")
 		}
-		rightGifImageView.animate(withGIFNamed: "giphy")
+		semaphoreThreads.signal()
+		
+		semaphoreThreads.wait()
+		if let rightGif = rightGif {
+			rightGifImageView.animate(withGIFData: rightGif)
+		} else {
+			rightGifImageView.animate(withGIFNamed: "giphy")
+		}
+		semaphoreThreads.signal()
 	}
 	
 	public func setAndActivateConstraints() {
