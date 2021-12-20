@@ -10,7 +10,7 @@ import Gifu
 
 class GifTableViewCell: UITableViewCell {
 	
-	let gif =  "https://media2.giphy.com/media/YhW0qsOoz8vb37vxFO/200w.gif?cid=ecf05e47dfrudf6kvbsem8rq2zzu3zzrrsc70s2trx4tbvr8&rid=200w.gif&ct=g"
+	var gif = ""
 	
 	let leftView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
@@ -36,7 +36,7 @@ class GifTableViewCell: UITableViewCell {
 
 	let leftGifImageView: GIFImageView = {
 		let image = GIFImageView()
-		image.contentMode = .scaleAspectFill
+		image.contentMode = .scaleAspectFit
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
 		image.bounds.size.height = image.bounds.size.width
 		image.translatesAutoresizingMaskIntoConstraints = false
@@ -45,7 +45,7 @@ class GifTableViewCell: UITableViewCell {
 	
 	let rightGifImageView: GIFImageView = {
 		let image = GIFImageView()
-		image.contentMode = .scaleAspectFill
+		image.contentMode = .scaleAspectFit
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
 		image.bounds.size.height = image.bounds.size.width
 		image.layer.cornerRadius = 3.0
@@ -63,16 +63,19 @@ class GifTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 	
-	public func configureGifs() {
+	public func configureGifs(gifURL: String) {
 		leftView.addSubview(leftGifImageView)
 		rightView.addSubview(rightGifImageView)
 		contentView.addSubview(rightView)
 		contentView.addSubview(leftView)
 		setAndActivateConstraints()
 
-		leftGifImageView.animate(withGIFNamed: "giphy")
+		gif = gifURL
 		let gifURL = URL(string: gif)!
-		rightGifImageView.animate(withGIFURL: gifURL)
+		if let data = try? Data(contentsOf: gifURL) {
+			leftGifImageView.animate(withGIFData: data)
+		}
+		rightGifImageView.animate(withGIFNamed: "giphy")
 	}
 	
 	public func setAndActivateConstraints() {
