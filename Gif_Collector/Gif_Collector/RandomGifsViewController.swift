@@ -10,7 +10,7 @@ import Dispatch
 
 class RandomGifsViewController: UITableViewController {
 
-	static private var gifArray = [GifData]()
+	static private var gifArray = [RowGifsData]()
 	static private var isFirstLoad = true
 	static private var gifArraySize = 0
 	
@@ -23,6 +23,7 @@ class RandomGifsViewController: UITableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
+		print(UIScreen.main.bounds.width)
 		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
 		if (RandomGifsViewController.isFirstLoad) {
 			_semaphoreArray.wait()
@@ -42,29 +43,41 @@ class RandomGifsViewController: UITableViewController {
 
 	
 	private func _loadFirstGifs() {
-		for _ in 0..<20 {
+		for _ in 0..<10 {
 			_semaphoreThreads.wait()
 			DispatchQueue.global(qos: .userInitiated).async {
-				guard let gifData = self.parse.getGifData(searchURL: randomGifAPILink) else {
+				guard let leftGifData = self.parse.getGifData(searchURL: randomGifAPILink) else {
 					return
 				}
+				guard let rightGifData = self.parse.getGifData(searchURL: randomGifAPILink) else {
+					return
+				}
+
+				let rowGifs = RowGifsData(leftGif: leftGifData, rightGif: rightGifData)
 				
 				self._semaphoreArray.wait()
-				RandomGifsViewController.gifArray.append(gifData)
-				print("width - \(gifData.pixelSize.width) height - \(gifData.pixelSize.height)")
+				RandomGifsViewController.gifArray.append(rowGifs)
+				print("width - \(rowGifs.leftGif.pixelSize.width) height - \(rowGifs.leftGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
+					
+					new Point Size width -  \(rowGifs.leftGif.pointSize.width) height - \(rowGifs.leftGif.pointSize.height)
+					
+					""")
+				print("width - \(rowGifs.rightGif.pixelSize.width) height - \(rowGifs.rightGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
+					
+					new Point Size width -  \(rowGifs.rightGif.pointSize.width) height - \(rowGifs.rightGif.pointSize.height)
+					
+					""")
 				self._semaphoreArray.signal()
 				
 				self._semaphoreLoadGifs.wait()
-				self._loadedGifs += 1
+				self._loadedGifs += 2
 				self._semaphoreLoadGifs.signal()
 
-				if (self._loadedGifs % 4 == 0) {
-					self._semaphoreArray.wait()
-					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
-					self._semaphoreArray.signal()
-					DispatchQueue.main.async {
-						self.tableView.reloadData()
-					}
+				self._semaphoreArray.wait()
+				RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+				self._semaphoreArray.signal()
+				DispatchQueue.main.async {
+					self.tableView.reloadData()
 				}
 			}
 			_semaphoreThreads.signal()
@@ -76,93 +89,41 @@ class RandomGifsViewController: UITableViewController {
 		if (RandomGifsViewController.gifArraySize < 8) {
 			return (4)
 		}
-		return (RandomGifsViewController.gifArraySize / 2)
+		return (RandomGifsViewController.gifArraySize)
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
 
-		print("CellForRow \(indexPath.row)")
-		var leftGif: GifData?
-		var rightGif: GifData?
-		let gifForRow = indexPath.row * 2
+//		print("CellForRow \(indexPath.row)")
+		var gifs: RowGifsData?
 
 		cell.selectionStyle = .none
 
 		_semaphoreArray.wait()
-		if (gifForRow < RandomGifsViewController.gifArray.count) {
-			leftGif = RandomGifsViewController.gifArray[gifForRow]
-		}
-		if (gifForRow + 1 < RandomGifsViewController.gifArray.count) {
-			rightGif = RandomGifsViewController.gifArray[gifForRow + 1]
+		if (indexPath.row < RandomGifsViewController.gifArray.count) {
+			gifs = RandomGifsViewController.gifArray[indexPath.row]
 		}
 		_semaphoreArray.signal()
 
-		cell.configureGifs(leftGif: leftGif,
-						   rightGif: rightGif,
+		cell.configureGifs(gifs: gifs,
 						   semaphoreThreads: _semaphoreThreads)
 		return (cell)
 	}
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
 //		print("HeightForROw \(indexPath.row)")
-//		var leftGif: GifData?
-//		var rightGif: GifData?
+//		var cellHeight: CGFloat = -1
 //		let gifForRow = indexPath.row * 2
 //		_semaphoreArray.wait()
 //		if (gifForRow < RandomGifsViewController.gifArray.count) {
-//			leftGif = RandomGifsViewController.gifArray[gifForRow]
-//		}
-//		if (gifForRow + 1 < RandomGifsViewController.gifArray.count) {
-//			rightGif = RandomGifsViewController.gifArray[gifForRow + 1]
+//			cellHeight = RandomGifsViewController.gifArray[gifForRow].cellHeight
 //		}
 //		_semaphoreArray.signal()
-//		return (getCellHeight(leftGifSize: leftGif?.size ?? GifSize(width: -1, height: -1)
-//							  , rightGifSize: rightGif?.size ?? GifSize(width: -1, height: -1)))
+//		if (cellHeight != -1) {
+//			return (cellHeight)
+//		}
 		return (UIScreen.main.bounds.width / 2 + 5)
-	}
-	
-	func getCellHeight(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
-		var leftGifRatio: CGFloat = -1
-		var rightGifRatio: CGFloat = -1
-		let leftViewWidht = _getLeftViewWidth(leftGifSize: leftGifSize, rightGifSize: rightGifSize)
-		let rightViewWidht = _getRightViewWidth(leftGifSize: leftGifSize, rightGifSize: rightGifSize)
-		
-		if (leftViewWidht != -1) {
-			leftGifRatio = CGFloat(leftGifSize.height / leftGifSize.width)
-		}
-		if (rightViewWidht != -1) {
-			rightGifRatio = CGFloat(rightGifSize.height / rightGifSize.width)
-		}
-		
-		if (leftGifRatio == -1 && rightGifRatio == -1){
-			return (UIScreen.main.bounds.width / 2 + 5)
-		}
-		else if (leftGifRatio == -1) {
-			return (rightViewWidht * rightGifRatio)
-		}
-		else if (rightGifRatio == -1) {
-			return (leftViewWidht * leftGifRatio)
-		}
-		return (leftGifRatio < rightGifRatio ? rightViewWidht * rightGifRatio : leftViewWidht * leftGifRatio)
-	}
-	
-	private func _getLeftViewWidth(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
-		if (leftGifSize.width == -1 || leftGifSize.height == -1) {
-			return (-1)
-		}
-		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
-		let viewWidth = widthOfTwoGifs / 2 * CGFloat(leftGifSize.width / rightGifSize.width)
-		return (viewWidth)
-	}
-	
-	private func _getRightViewWidth(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
-		if (rightGifSize.width == -1 || rightGifSize.height == -1) {
-			return (-1)
-		}
-		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
-		let viewWidth = widthOfTwoGifs / 2 * CGFloat(rightGifSize.width / leftGifSize.width)
-		return (viewWidth)
 	}
 }
 
