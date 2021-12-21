@@ -8,6 +8,9 @@
 
 /* Begin PBXBuildFile section */
 		70D6C05076C1F83ED68ACAE5 /* Pods_Gif_Collector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B2B4D003AF3987E3F311DB /* Pods_Gif_Collector.framework */; };
+		7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */; };
+		7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */; };
+		7D3A28E52771F06D00FC00F0 /* GifData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E42771F06D00FC00F0 /* GifData.swift */; };
 		7D96E101276CBC3D00DD8E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */; };
 		7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */; };
 		7D96E105276CBC3D00DD8E78 /* RandomGifsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E104276CBC3D00DD8E78 /* RandomGifsViewController.swift */; };
@@ -20,6 +23,9 @@
 /* Begin PBXFileReference section */
 		0DB2033D903327389BDD2336 /* Pods-Gif_Collector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif_Collector.debug.xcconfig"; path = "Target Support Files/Pods-Gif_Collector/Pods-Gif_Collector.debug.xcconfig"; sourceTree = "<group>"; };
 		67B2B4D003AF3987E3F311DB /* Pods_Gif_Collector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gif_Collector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseJSON.swift; sourceTree = "<group>"; };
+		7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsValues.swift; sourceTree = "<group>"; };
+		7D3A28E42771F06D00FC00F0 /* GifData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifData.swift; sourceTree = "<group>"; };
 		7D96E0FD276CBC3D00DD8E78 /* Gif_Collector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gif_Collector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -77,6 +83,9 @@
 				7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */,
 				7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */,
 				7D96E104276CBC3D00DD8E78 /* RandomGifsViewController.swift */,
+				7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */,
+				7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */,
+				7D3A28E42771F06D00FC00F0 /* GifData.swift */,
 				7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */,
 				7D96E10C276CBC3E00DD8E78 /* Assets.xcassets */,
 				7D96E10E276CBC3E00DD8E78 /* LaunchScreen.storyboard */,
@@ -208,10 +217,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7D3A28E52771F06D00FC00F0 /* GifData.swift in Sources */,
 				7D96E105276CBC3D00DD8E78 /* RandomGifsViewController.swift in Sources */,
 				7D96E101276CBC3D00DD8E78 /* AppDelegate.swift in Sources */,
 				7D96E118276CD03D00DD8E78 /* GifTableViewCell.swift in Sources */,
 				7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */,
+				7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */,
+				7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

@@ -10,18 +10,16 @@ import Dispatch
 
 class RandomGifsViewController: UITableViewController {
 
-//	var json: String?
-//	var gifURL = ""
-
-	static private var gifArray = [Data]()
+	static private var gifArray = [GifData]()
 	static private var isFirstLoad = true
 	static private var gifArraySize = 0
 	
 	private let _semaphoreArray = DispatchSemaphore(value: 1)
 	private let _semaphoreThreads = DispatchSemaphore(value: 4)
-	private let _semaphoreNumberOfCurrentlyLoadingGifs = DispatchSemaphore(value: 1)
+	private let _semaphoreLoadGifs = DispatchSemaphore(value: 1)
 	
-	private var _numberOfCurrentlyLoadingGifs = 0
+	private var _loadedGifs = 0
+	private let parse = ParseJSON()
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
@@ -36,28 +34,31 @@ class RandomGifsViewController: UITableViewController {
 			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
 			_semaphoreArray.signal()
 //			DispatchQueue.global().async {
-//				sleep(15)
+//				sleep(30)
 //				print(RandomGifsViewController.gifArray.count)
 //			}
-//
-//			print(RandomGifsViewController.gifArray.count)
 		}
 	}
 
 	
 	private func _loadFirstGifs() {
-		for i in 0..<15 {
+		for _ in 0..<20 {
 			_semaphoreThreads.wait()
 			DispatchQueue.global(qos: .userInitiated).async {
-				guard let data = self._getGifData() else {
+				guard let gifData = self.parse.getGifData(searchURL: randomGifAPILink) else {
 					return
 				}
 				
 				self._semaphoreArray.wait()
-				RandomGifsViewController.gifArray.append(data)
+				RandomGifsViewController.gifArray.append(gifData)
+				print("width - \(gifData.pixelSize.width) height - \(gifData.pixelSize.height)")
 				self._semaphoreArray.signal()
+				
+				self._semaphoreLoadGifs.wait()
+				self._loadedGifs += 1
+				self._semaphoreLoadGifs.signal()
 
-				if (i % 3 == 0) {
+				if (self._loadedGifs % 4 == 0) {
 					self._semaphoreArray.wait()
 					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
 					self._semaphoreArray.signal()
@@ -67,45 +68,13 @@ class RandomGifsViewController: UITableViewController {
 				}
 			}
 			_semaphoreThreads.signal()
-		}
-	}
-	
-	private func _loadTwoGifs() {
-		for i in 0..<2 {
-			_semaphoreThreads.wait()
-			DispatchQueue.global(qos: .userInitiated).async {
-				self._semaphoreNumberOfCurrentlyLoadingGifs.wait()
-				self._numberOfCurrentlyLoadingGifs += 1
-				self._semaphoreNumberOfCurrentlyLoadingGifs.signal()
-
-				guard let data = self._getGifData() else {
-					return
-				}
-				self._semaphoreArray.wait()
-				RandomGifsViewController.gifArray.append(data)
-				self._semaphoreArray.signal()
-				
-				if (i == 1) {
-					self._semaphoreArray.wait()
-					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
-					self._semaphoreArray.signal()
-					DispatchQueue.main.async {
-						self.tableView.reloadData()
-					}
-				}
-				self._semaphoreNumberOfCurrentlyLoadingGifs.wait()
-				self._numberOfCurrentlyLoadingGifs -= 1
-				self._semaphoreNumberOfCurrentlyLoadingGifs.signal()
-			}
-			_semaphoreThreads.signal()
-			
 		}
 	}
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		
-		if (RandomGifsViewController.gifArraySize < 10) {
-			return (5)
+		if (RandomGifsViewController.gifArraySize < 8) {
+			return (4)
 		}
 		return (RandomGifsViewController.gifArraySize / 2)
 	}
@@ -113,20 +82,12 @@ class RandomGifsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
 
-		var leftGif: Data?
-		var rightGif: Data?
+		print("CellForRow \(indexPath.row)")
+		var leftGif: GifData?
+		var rightGif: GifData?
 		let gifForRow = indexPath.row * 2
 
 		cell.selectionStyle = .none
-
-		_semaphoreNumberOfCurrentlyLoadingGifs.wait()
-		print(_numberOfCurrentlyLoadingGifs)
-		if (RandomGifsViewController.gifArraySize > 14
-				&& gifForRow + 6 >= RandomGifsViewController.gifArraySize
-				&& _numberOfCurrentlyLoadingGifs < 5) {
-			_loadTwoGifs()
-		}
-		_semaphoreNumberOfCurrentlyLoadingGifs.signal()
 
 		_semaphoreArray.wait()
 		if (gifForRow < RandomGifsViewController.gifArray.count) {
@@ -144,84 +105,64 @@ class RandomGifsViewController: UITableViewController {
 	}
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+//		print("HeightForROw \(indexPath.row)")
+//		var leftGif: GifData?
+//		var rightGif: GifData?
+//		let gifForRow = indexPath.row * 2
+//		_semaphoreArray.wait()
+//		if (gifForRow < RandomGifsViewController.gifArray.count) {
+//			leftGif = RandomGifsViewController.gifArray[gifForRow]
+//		}
+//		if (gifForRow + 1 < RandomGifsViewController.gifArray.count) {
+//			rightGif = RandomGifsViewController.gifArray[gifForRow + 1]
+//		}
+//		_semaphoreArray.signal()
+//		return (getCellHeight(leftGifSize: leftGif?.size ?? GifSize(width: -1, height: -1)
+//							  , rightGifSize: rightGif?.size ?? GifSize(width: -1, height: -1)))
 		return (UIScreen.main.bounds.width / 2 + 5)
 	}
 	
-	private func _giphyURL(serachURL: String) -> URL? {
-		let url = URL(string: "https://api.giphy.com/v1/gifs/random?api_key=4iYL33Ywl2xS59XUL40sPHH9cjjVnTfE&tag=&rating=r")
-		return (url)
+	func getCellHeight(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
+		var leftGifRatio: CGFloat = -1
+		var rightGifRatio: CGFloat = -1
+		let leftViewWidht = _getLeftViewWidth(leftGifSize: leftGifSize, rightGifSize: rightGifSize)
+		let rightViewWidht = _getRightViewWidth(leftGifSize: leftGifSize, rightGifSize: rightGifSize)
+		
+		if (leftViewWidht != -1) {
+			leftGifRatio = CGFloat(leftGifSize.height / leftGifSize.width)
+		}
+		if (rightViewWidht != -1) {
+			rightGifRatio = CGFloat(rightGifSize.height / rightGifSize.width)
+		}
+		
+		if (leftGifRatio == -1 && rightGifRatio == -1){
+			return (UIScreen.main.bounds.width / 2 + 5)
+		}
+		else if (leftGifRatio == -1) {
+			return (rightViewWidht * rightGifRatio)
+		}
+		else if (rightGifRatio == -1) {
+			return (leftViewWidht * leftGifRatio)
+		}
+		return (leftGifRatio < rightGifRatio ? rightViewWidht * rightGifRatio : leftViewWidht * leftGifRatio)
 	}
 	
-	private func _performGyphyRequest(with url: URL) -> String? {
-		do {
-			return (try String(contentsOf: url, encoding: .utf8))
-		} catch {
-			print("Download Error: \(error)")
-			return (nil)
+	private func _getLeftViewWidth(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
+		if (leftGifSize.width == -1 || leftGifSize.height == -1) {
+			return (-1)
 		}
+		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
+		let viewWidth = widthOfTwoGifs / 2 * CGFloat(leftGifSize.width / rightGifSize.width)
+		return (viewWidth)
 	}
 	
-	private func _getJSONData() -> String? {
-		guard let url = _giphyURL(serachURL: "") else {
-			return (nil)
+	private func _getRightViewWidth(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
+		if (rightGifSize.width == -1 || rightGifSize.height == -1) {
+			return (-1)
 		}
-		guard let data = _performGyphyRequest(with: url) else {
-			return (nil)
-		}
-		return (data)
-	}
-	
-	private func _parseGifURLFromJSON(json: String) -> String? {
-		
-		guard let data = json.data(using: .utf8, allowLossyConversion: false) else {
-			return (nil)
-		}
-		
-		var jsonData: [String: Any]?
-		
-		do {
-			jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
-		} catch {
-			print("JSON ERROR \(error)")
-			return (nil)
-		}
-		
-		guard let jsonDataUnwrapped = jsonData else {
-			return (nil)
-		}
-
-		guard let data = jsonDataUnwrapped["data"] as? [String: Any] else {
-			print("Expectred 'data' dictionary")
-			return (nil)
-		}
-		
-		guard let images = data["images"] as? [String: Any] else {
-			print("Expectred 'images' dictionary")
-			return (nil)
-		}
-		
-		guard let original = images["original"] as? [String: Any] else {
-			print("Expectred 'original' dictionary")
-			return (nil)
-		}
-
-		return (original["url"] as? String)
-	}
-	
-	private func _getGifData() -> Data? {
-		guard let json = _getJSONData() else {
-			return (nil)
-		}
-		guard let url = _parseGifURLFromJSON(json: json) else {
-			return (nil)
-		}
-		guard let gifURL = URL(string: url) else {
-			return (nil)
-		}
-		guard let data = try? Data(contentsOf: gifURL) else {
-			return (nil)
-		}
-		return (data)
+		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
+		let viewWidth = widthOfTwoGifs / 2 * CGFloat(rightGifSize.width / leftGifSize.width)
+		return (viewWidth)
 	}
 }
 
