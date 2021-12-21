@@ -16,9 +16,7 @@ class RandomGifsViewController: UITableViewController {
 	
 	private let _semaphoreArray = DispatchSemaphore(value: 1)
 	private let _semaphoreThreads = DispatchSemaphore(value: 4)
-	private let _semaphoreLoadGifs = DispatchSemaphore(value: 1)
 	
-	private var _loadedGifs = 0
 	private let parse = ParseJSON()
 	
 	override func viewDidLoad() {
@@ -68,10 +66,6 @@ class RandomGifsViewController: UITableViewController {
 					
 					""")
 				self._semaphoreArray.signal()
-				
-				self._semaphoreLoadGifs.wait()
-				self._loadedGifs += 2
-				self._semaphoreLoadGifs.signal()
 
 				self._semaphoreArray.wait()
 				RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
