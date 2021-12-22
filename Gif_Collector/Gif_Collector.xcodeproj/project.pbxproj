@@ -22,6 +22,7 @@
 		7D96E110276CBC3E00DD8E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D96E10E276CBC3E00DD8E78 /* LaunchScreen.storyboard */; };
 		7D96E118276CD03D00DD8E78 /* GifTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */; };
 		7D96E11A276CF03C00DD8E78 /* giphy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D96E119276CF03C00DD8E78 /* giphy.gif */; };
+		7DFCB00427736CE400B97987 /* TopBarView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DFCB00327736CE400B97987 /* TopBarView.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
@@ -43,6 +44,7 @@
 		7D96E111276CBC3E00DD8E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifTableViewCell.swift; sourceTree = "<group>"; };
 		7D96E119276CF03C00DD8E78 /* giphy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = giphy.gif; sourceTree = "<group>"; };
+		7DFCB00327736CE400B97987 /* TopBarView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TopBarView.swift; sourceTree = "<group>"; };
 		FA28CF921F4F8B750584F471 /* Pods-Gif_Collector.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif_Collector.release.xcconfig"; path = "Target Support Files/Pods-Gif_Collector/Pods-Gif_Collector.release.xcconfig"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -111,6 +113,7 @@
 				7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */,
 				7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */,
 				7D96E104276CBC3D00DD8E78 /* RandomGifsViewController.swift */,
+				7DFCB00327736CE400B97987 /* TopBarView.swift */,
 				7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */,
 				7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */,
 				7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */,
@@ -255,6 +258,7 @@
 				7D96E118276CD03D00DD8E78 /* GifTableViewCell.swift in Sources */,
 				7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */,
 				7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */,
+				7DFCB00427736CE400B97987 /* TopBarView.swift in Sources */,
 				7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

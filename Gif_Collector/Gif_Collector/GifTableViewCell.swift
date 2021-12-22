@@ -112,11 +112,11 @@ class GifTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
 	
-	public func configureGifs(gifs: RowGifsData?) {
+	public func configureGifs(gifs: RowGifsData?, topBarOffset: CGFloat) {
 
 		_setViewsSize(leftGifSize: gifs?.leftGif.pointSize ?? GifSize(width: -1, height: -1),
 								   rightGifSize: gifs?.rightGif.pointSize ?? GifSize(width: -1, height: -1))
-		_setViewsPosition()
+		_setViewsPosition(topBarOffset: topBarOffset)
 		
 		leftView.addSubview(leftGifImageView)
 		rightView.addSubview(rightGifImageView)
@@ -149,13 +149,13 @@ class GifTableViewCell: UITableViewCell {
 			y: rightView.bounds.size.height / 2 - rightGifImageView.bounds.size.height / 2)
 	}
 	
-	private func _setViewsPosition() {
+	private func _setViewsPosition(topBarOffset: CGFloat) {
 		leftView.frame.origin = CGPoint(
 				x: gifHorizontalOffset,
-				y: contentView.bounds.size.height / 2 - leftView.bounds.size.height / 2)
+				y: contentView.bounds.size.height / 2 - leftView.bounds.size.height / 2 + topBarOffset / 2)
 		rightView.frame.origin = CGPoint(
 				x: contentView.bounds.size.width - rightView.bounds.size.width - gifHorizontalOffset,
-				y: contentView.bounds.size.height / 2 - rightView.bounds.size.height / 2)
+				y: contentView.bounds.size.height / 2 - rightView.bounds.size.height / 2 + topBarOffset / 2)
 		leftGifImageView.frame.origin = CGPoint(x: 0, y: 0)
 		rightGifImageView.frame.origin = CGPoint(x: 0, y: 0)
 	}

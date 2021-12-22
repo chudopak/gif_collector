@@ -8,7 +8,8 @@
 import Foundation
 import UIKit
 
-let randomGifAPILink = "https://api.giphy.com/v1/gifs/random?api_key=4iYL33Ywl2xS59XUL40sPHH9cjjVnTfE&tag=&rating=r"
+let randomGifAPILink = "https://api.giphy.com/v1/gifs/random?api_key=3uMK0zrprPJ3DWsJJNItj2H4XhdWm64e&tag="
+let endLink = "&rating=g"
 
 let gifVerticalOffset: CGFloat = 10
 let gifHorizontalOffset: CGFloat = 10
