@@ -32,10 +32,6 @@ class RandomGifsViewController: UITableViewController {
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
 			_semaphoreArray.signal()
-//			DispatchQueue.global().async {
-//				sleep(30)
-//				print(RandomGifsViewController.gifArray.count)
-//			}
 		}
 	}
 
@@ -55,16 +51,16 @@ class RandomGifsViewController: UITableViewController {
 				
 				self._semaphoreArray.wait()
 				RandomGifsViewController.gifArray.append(rowGifs)
-				print("width - \(rowGifs.leftGif.pixelSize.width) height - \(rowGifs.leftGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
-					
-					new Point Size width -  \(rowGifs.leftGif.pointSize.width) height - \(rowGifs.leftGif.pointSize.height)
-					
-					""")
-				print("width - \(rowGifs.rightGif.pixelSize.width) height - \(rowGifs.rightGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
-					
-					new Point Size width -  \(rowGifs.rightGif.pointSize.width) height - \(rowGifs.rightGif.pointSize.height)
-					
-					""")
+//				print("width - \(rowGifs.leftGif.pixelSize.width) height - \(rowGifs.leftGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
+//					
+//					new Point Size width -  \(rowGifs.leftGif.pointSize.width) height - \(rowGifs.leftGif.pointSize.height)
+//					
+//					""")
+//				print("width - \(rowGifs.rightGif.pixelSize.width) height - \(rowGifs.rightGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
+//					
+//					new Point Size width -  \(rowGifs.rightGif.pointSize.width) height - \(rowGifs.rightGif.pointSize.height)
+//					
+//					""")
 				self._semaphoreArray.signal()
 
 				self._semaphoreArray.wait()
@@ -72,6 +68,7 @@ class RandomGifsViewController: UITableViewController {
 				self._semaphoreArray.signal()
 				DispatchQueue.main.async {
 					self.tableView.reloadData()
+					print("WeHere Reloading")
 				}
 			}
 			_semaphoreThreads.signal()
@@ -89,7 +86,6 @@ class RandomGifsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
 
-//		print("CellForRow \(indexPath.row)")
 		var gifs: RowGifsData?
 
 		cell.selectionStyle = .none
@@ -100,23 +96,20 @@ class RandomGifsViewController: UITableViewController {
 		}
 		_semaphoreArray.signal()
 
-		cell.configureGifs(gifs: gifs,
-						   semaphoreThreads: _semaphoreThreads)
+		cell.configureGifs(gifs: gifs)
 		return (cell)
 	}
 	
 	override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-//		print("HeightForROw \(indexPath.row)")
-//		var cellHeight: CGFloat = -1
-//		let gifForRow = indexPath.row * 2
-//		_semaphoreArray.wait()
-//		if (gifForRow < RandomGifsViewController.gifArray.count) {
-//			cellHeight = RandomGifsViewController.gifArray[gifForRow].cellHeight
-//		}
-//		_semaphoreArray.signal()
-//		if (cellHeight != -1) {
-//			return (cellHeight)
-//		}
+		var cellHeight: CGFloat = -1
+		_semaphoreArray.wait()
+		if (indexPath.row < RandomGifsViewController.gifArray.count) {
+			cellHeight = RandomGifsViewController.gifArray[indexPath.row].cellHeight
+		}
+		_semaphoreArray.signal()
+		if (cellHeight != -1) {
+			return (cellHeight)
+		}
 		return (UIScreen.main.bounds.width / 2 + 5)
 	}
 }

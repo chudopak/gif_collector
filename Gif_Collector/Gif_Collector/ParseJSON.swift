@@ -12,14 +12,14 @@ class ParseJSON {
 	
 	func parseGifInfoFromJSON(json: String) -> [String: Any]? {
 		
-		guard let data = json.data(using: .utf8, allowLossyConversion: false) else {
+		guard let jDataUnparsed = json.data(using: .utf8, allowLossyConversion: false) else {
 			return (nil)
 		}
 		
 		var jsonData: [String: Any]?
 		
 		do {
-			jsonData = try JSONSerialization.jsonObject(with: data, options: []) as? [String: Any]
+			jsonData = try JSONSerialization.jsonObject(with: jDataUnparsed, options: []) as? [String: Any]
 		} catch {
 			print("JSON ERROR \(error)")
 			return (nil)
@@ -39,12 +39,11 @@ class ParseJSON {
 			return (nil)
 		}
 		
-		guard let fixed_height_downsampled = images["fixed_height_downsampled"] as? [String: Any] else {
-			print("Expectred 'fixed_height_downsampled' dictionary")
+		guard let gifData = images["downsized"] as? [String: Any] else {
+			print("Expectred 'downsized' dictionary")
 			return (nil)
 		}
-//		print(fixed_height_downsampled)
-		return (fixed_height_downsampled)
+		return (gifData)
 	}
 	
 	func performGyphyRequest(with url: URL) -> String? {
@@ -94,13 +93,11 @@ class ParseJSON {
 		var height: Int = -1
 		
 		if let w = gifInfo["width"] as? String {
-//			print("wi", w)
 			width = Int(w) ?? -1
 		}
 		if let h = gifInfo["height"] as? String {
-//			print("he", h)
 			height = Int(h) ?? -1
 		}
-		return (GifData(data: data, width: width, height: height))
+		return (GifData(data: data, width: CGFloat(width), height: CGFloat(height)))
 	}
 }

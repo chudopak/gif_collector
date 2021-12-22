@@ -9,8 +9,8 @@ import Foundation
 import UIKit
 
 struct GifSize {
-	var width: Int
-	var height: Int
+	var width: CGFloat
+	var height: CGFloat
 }
 
 struct GifData {
@@ -18,7 +18,7 @@ struct GifData {
 	let pixelSize: GifSize
 	var pointSize: GifSize = GifSize(width: -1, height: -1)
 	
-	init(data: Data, width: Int, height: Int) {
+	init(data: Data, width: CGFloat, height: CGFloat) {
 		gif = data
 		pixelSize = GifSize(width: width, height: height)
 	}
@@ -38,6 +38,7 @@ class RowGifsData {
 	var leftGif: GifData
 	var rightGif: GifData
 	var cellHeight: CGFloat = -1
+	private let _controlMaxRatio: CGFloat = 1.3
 	
 	init(leftGif: GifData, rightGif: GifData) {
 		self.leftGif = leftGif
@@ -52,9 +53,9 @@ class RowGifsData {
 	
 	private func _getCellHeight(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
 		if (leftGifSize.height > rightGifSize.height) {
-			return (CGFloat(leftGifSize.height) + 20.0)
+			return (leftGifSize.height + 20.0)
 		} else {
-			return (CGFloat(rightGifSize.height) + 20.0)
+			return (rightGifSize.height + 20.0)
 		}
 	}
 	
@@ -64,9 +65,9 @@ class RowGifsData {
 		}
 		
 		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
-		let ratio: CGFloat = CGFloat(leftGifSize.width) / CGFloat(rightGifSize.width)
-		if (ratio > 1.5) {
-			return (widthOfTwoGifs / 2 * 1.5)
+		let ratio: CGFloat = leftGifSize.width / rightGifSize.width
+		if (ratio > _controlMaxRatio) {
+			return (widthOfTwoGifs / 2 * _controlMaxRatio)
 		}
 		return (widthOfTwoGifs / 2 * ratio)
 	}
@@ -78,9 +79,9 @@ class RowGifsData {
 
 		let widthOfTwoGifs = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
 		if (leftGifSize.width == -1 || leftGifSize.height == -1) {
-			let ratio: CGFloat = CGFloat(rightGifSize.width) / CGFloat(leftGifSize.width)
-			if (ratio > 1.5) {
-				return (widthOfTwoGifs / 2 * 1.5)
+			let ratio: CGFloat = rightGifSize.width / leftGifSize.width
+			if (ratio > _controlMaxRatio) {
+				return (widthOfTwoGifs / 2 * _controlMaxRatio)
 			} else {
 				return (widthOfTwoGifs / 2 * ratio)
 			}
@@ -93,8 +94,8 @@ class RowGifsData {
 		var leftGifHeight: CGFloat = -1
 		leftGifWidth = _getLeftViewWidth(leftGifSize: leftGifData.pixelSize,
 											   rightGifSize: rightGifData.pixelSize)
-		leftGifHeight = CGFloat(leftGifData.pixelSize.height) / CGFloat(leftGifData.pixelSize.width) * leftGifWidth
-		return (GifSize(width: Int(leftGifWidth), height: Int(leftGifHeight)))
+		leftGifHeight = leftGifData.pixelSize.height / leftGifData.pixelSize.width * leftGifWidth
+		return (GifSize(width:leftGifWidth, height: leftGifHeight))
 	}
 
 	private func _getRightGifPointSize(leftGifData: GifData, rightGifData: GifData) -> GifSize {
@@ -102,7 +103,7 @@ class RowGifsData {
 		var rightGifHeight: CGFloat = -1
 		rightGifWidth = _getRightViewWidth(leftGifSize: leftGifData.pixelSize,
 											   rightGifSize: rightGifData.pixelSize)
-		rightGifHeight = CGFloat(rightGifData.pixelSize.height) / CGFloat(rightGifData.pixelSize.width) * rightGifWidth
-		return (GifSize(width: Int(rightGifWidth), height: Int(rightGifHeight)))
+		rightGifHeight = rightGifData.pixelSize.height / rightGifData.pixelSize.width * rightGifWidth
+		return (GifSize(width: rightGifWidth, height: rightGifHeight))
 	}
 }
