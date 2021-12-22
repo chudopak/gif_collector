@@ -43,6 +43,7 @@ class ParseJSON {
 			print("Expectred 'downsized' dictionary")
 			return (nil)
 		}
+//		print(gifData)
 		return (gifData)
 	}
 	

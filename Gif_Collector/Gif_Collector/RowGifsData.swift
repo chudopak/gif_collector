@@ -38,7 +38,7 @@ class RowGifsData {
 	var leftGif: GifData
 	var rightGif: GifData
 	var cellHeight: CGFloat = -1
-	private let _controlMaxRatio: CGFloat = 1.3
+	private let _controlMaxRatio: CGFloat = 1.25
 	
 	init(leftGif: GifData, rightGif: GifData) {
 		self.leftGif = leftGif
@@ -53,9 +53,9 @@ class RowGifsData {
 	
 	private func _getCellHeight(leftGifSize: GifSize, rightGifSize: GifSize) -> CGFloat {
 		if (leftGifSize.height > rightGifSize.height) {
-			return (leftGifSize.height + 20.0)
+			return (leftGifSize.height + gifVerticalOffset * 2)
 		} else {
-			return (rightGifSize.height + 20.0)
+			return (rightGifSize.height + gifVerticalOffset * 2)
 		}
 	}
 	

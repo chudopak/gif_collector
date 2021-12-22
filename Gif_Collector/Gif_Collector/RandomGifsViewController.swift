@@ -23,6 +23,14 @@ class RandomGifsViewController: UITableViewController {
 		super.viewDidLoad()
 		print(UIScreen.main.bounds.width)
 		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
+		tableView.backgroundColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+			default:
+				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+			}
+		}
 		if (RandomGifsViewController.isFirstLoad) {
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArray.reserveCapacity(50)
@@ -68,7 +76,7 @@ class RandomGifsViewController: UITableViewController {
 				self._semaphoreArray.signal()
 				DispatchQueue.main.async {
 					self.tableView.reloadData()
-					print("WeHere Reloading")
+//					print("WeHere Reloading")
 				}
 			}
 			_semaphoreThreads.signal()
