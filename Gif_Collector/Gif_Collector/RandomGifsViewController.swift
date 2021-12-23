@@ -40,15 +40,9 @@ class RandomGifsViewController: UITableViewController {
 		searchBar.searchBarStyle = .default
 		searchBar.placeholder = "Search..."
 		searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
-		searchBar.isTranslucent = false
-		return (searchBar)
-	} ()
-	
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		_setTopBarView()
-		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
-		tableView.backgroundColor = UIColor { tc in
+		searchBar.isTranslucent = true
+		searchBar.backgroundImage = UIImage()
+		searchBar.barTintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
 				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
@@ -56,6 +50,29 @@ class RandomGifsViewController: UITableViewController {
 				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
 			}
 		}
+		searchBar.tintColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+			default:
+				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+			}
+		}
+		searchBar.backgroundColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+			default:
+				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+			}
+		}
+		return (searchBar)
+	} ()
+	
+	override func viewDidLoad() {
+		super.viewDidLoad()
+		_setUpTableView()
+		_setUpTopBarView()
 		if (RandomGifsViewController.isFirstLoad) {
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArray.reserveCapacity(50)
@@ -68,10 +85,34 @@ class RandomGifsViewController: UITableViewController {
 		}
 	}
 
-	private func _setTopBarView() {
+	private func _setUpTopBarView() {
 		view.addSubview(topBarView)
 		topBarView.addSubview(searchBar)
 		searchBar.delegate = self
+		if let textField = searchBar.value(forKey: "searchField") as? UITextField {
+			textField.backgroundColor = UIColor { tc in
+				switch tc.userInterfaceStyle {
+				case .dark:
+					return (UIColor(red: 0.19, green: 0.195, blue: 0.199, alpha: 1))
+				default:
+					return (UIColor(red: 0.884, green: 0.911, blue: 0.478, alpha: 1))
+				}
+			}
+		}
+	}
+	
+	private func _setUpTableView() {
+		tableView.separatorColor = .none
+		tableView.separatorStyle = .none
+		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
+		tableView.backgroundColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+			default:
+				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+			}
+		}
 	}
 	
 	private func _loadFirstGifs() {
@@ -155,13 +196,19 @@ class RandomGifsViewController: UITableViewController {
 		_loadFirstGifs()
 		
 	}
+	
+	private func _convertSearchTagToLinkFormat(tag: String) -> String {
+
+		let finalTag: String = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
+		return (finalTag)
+	}
 }
 
 extension RandomGifsViewController: UISearchBarDelegate {
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
 		searchBar.showsCancelButton = false
-		searchTag = searchBar.text!
+		searchTag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
 		searchBar.text! = ""
 		_reloadGifList()
 		print("Start searching..", searchTag, randomGifAPILink + searchTag + endLink)
@@ -191,3 +238,37 @@ extension RandomGifsViewController: UISearchBarDelegate {
 //					new Point Size width -  \(rowGifs.rightGif.pointSize.width) height - \(rowGifs.rightGif.pointSize.height)
 //
 //					""")
+
+//		finalTag = finalTag.replacingOccurrences(of: "%", with: "%25")
+//
+//		finalTag = finalTag.replacingOccurrences(of: "\'", with: "%27", options: .literal, range: nil)
+//		finalTag = finalTag.replacingOccurrences(of: "'", with: "%27")
+//		finalTag = finalTag.replacingOccurrences(of: "+", with: "%2B")
+//		finalTag = finalTag.replacingOccurrences(of: " ", with: "+")
+//		finalTag = finalTag.replacingOccurrences(of: "/", with: "%2F")
+//		finalTag = finalTag.replacingOccurrences(of: "?", with: "%3F")
+//		finalTag = finalTag.replacingOccurrences(of: ">", with: "%3E")
+//		finalTag = finalTag.replacingOccurrences(of: "<", with: "%3C")
+//		finalTag = finalTag.replacingOccurrences(of: ",", with: "%2C")
+//		finalTag = finalTag.replacingOccurrences(of: "`", with: "%60")
+//		finalTag = finalTag.replacingOccurrences(of: "~", with: "%7E")
+//		finalTag = finalTag.replacingOccurrences(of: "=", with: "%3D")
+//		finalTag = finalTag.replacingOccurrences(of: "!", with: "%21")
+//		finalTag = finalTag.replacingOccurrences(of: "@", with: "%40")
+//		finalTag = finalTag.replacingOccurrences(of: "#", with: "%23")
+//		finalTag = finalTag.replacingOccurrences(of: "$", with: "%24")
+//		finalTag = finalTag.replacingOccurrences(of: "^", with: "%5E")
+//		finalTag = finalTag.replacingOccurrences(of: "&", with: "%26")
+//		finalTag = finalTag.replacingOccurrences(of: "(", with: "%28")
+//		finalTag = finalTag.replacingOccurrences(of: ")", with: "%29")
+//		finalTag = finalTag.replacingOccurrences(of: "{", with: "%7B")
+//		finalTag = finalTag.replacingOccurrences(of: "}", with: "%7D")
+//		finalTag = finalTag.replacingOccurrences(of: "[", with: "%5B")
+//		finalTag = finalTag.replacingOccurrences(of: "]", with: "%5D")
+//		finalTag = finalTag.replacingOccurrences(of: "|", with: "%7C")
+//		finalTag = finalTag.replacingOccurrences(of: "\\", with: "%5C")
+//		finalTag = finalTag.replacingOccurrences(of: ";", with: "%3B")
+//		finalTag = finalTag.replacingOccurrences(of: ":", with: "%3A")
+//
+//		finalTag = finalTag.replacingOccurrences(of: "\"", with: "%22")
+//		finalTag = finalTag.replacingOccurrences(of: ":", with: "%3A")
