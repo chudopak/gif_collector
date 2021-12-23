@@ -20,26 +20,56 @@ class RandomGifsViewController: UITableViewController {
 	private let parse = ParseJSON()
 	
 	private var searchTag = ""
+	private var tag = ""
+	
+	lazy var refreshToPull: UIRefreshControl = {
+		var refreshControll = UIRefreshControl()
+		refreshControll.addTarget(self, action: #selector(_refreshControllerCalled), for: .valueChanged)
+		return (refreshControll)
+	} ()
+	
+	lazy var refreshButton: UIButton = {
+		let button = UIButton()
+		button.backgroundColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+			default:
+				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+			}
+		}
+		let titleColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+			default:
+				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+			}
+		}
+		button.tintColor = UIColor { tc in
+			switch tc.userInterfaceStyle {
+			case .dark:
+				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+			default:
+				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+			}
+		}
+		button.setTitleColor(titleColor, for: .normal)
+		button.setImage(UIImage(named: "refresh"), for: .normal)
+		button.addTarget(self, action: #selector(_refreshButtonPressed), for: .touchUpInside)
+		return (button)
+	} ()
 
 	private let topBarView: UIView = {
 		let v = UIView()
-		v.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
-		v.backgroundColor = UIColor { tc in
-			switch tc.userInterfaceStyle {
-			case .dark:
-				return (UIColor(red: 0.14, green: 0.14, blue: 0.14, alpha: 1))
-			default:
-				return (UIColor(red: 0.91, green: 0.941, blue: 0.73, alpha: 1))
-			}
-		}
+		v.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: topBarHeight)
 		return (v)
 	}()
 	
 	lazy var searchBar: UISearchBar = {
 		var searchBar = UISearchBar()
 		searchBar.searchBarStyle = .default
-		searchBar.placeholder = "Search..."
-		searchBar.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: 50)
+		searchBar.placeholder = "Search for pets"
 		searchBar.isTranslucent = true
 		searchBar.backgroundImage = UIImage()
 		searchBar.barTintColor = UIColor { tc in
@@ -84,10 +114,11 @@ class RandomGifsViewController: UITableViewController {
 			_semaphoreArray.signal()
 		}
 	}
-
+	
 	private func _setUpTopBarView() {
 		view.addSubview(topBarView)
 		topBarView.addSubview(searchBar)
+		topBarView.addSubview(refreshButton)
 		searchBar.delegate = self
 		if let textField = searchBar.value(forKey: "searchField") as? UITextField {
 			textField.backgroundColor = UIColor { tc in
@@ -99,9 +130,18 @@ class RandomGifsViewController: UITableViewController {
 				}
 			}
 		}
+		searchBar.frame = CGRect(x: 0,
+								 y: 0,
+								 width: UIScreen.main.bounds.width - topBarHeight,
+								 height: topBarHeight)
+		refreshButton.frame = CGRect(x: UIScreen.main.bounds.width - topBarHeight,
+									 y: 0,
+									 width: topBarHeight,
+									 height: topBarHeight)
 	}
 	
 	private func _setUpTableView() {
+		tableView.refreshControl = refreshToPull
 		tableView.separatorColor = .none
 		tableView.separatorStyle = .none
 		tableView.register(GifTableViewCell.self, forCellReuseIdentifier: GifTableViewCell.identifier)
@@ -114,7 +154,44 @@ class RandomGifsViewController: UITableViewController {
 			}
 		}
 	}
+
+	@objc private func _refreshControllerCalled(sender: UIRefreshControl) {
+		_refresh(usingRefrechControl: true)
+	}
 	
+	@objc private func _refreshButtonPressed() {
+		_refresh(usingRefrechControl: false)
+	}
+	
+	private func _refresh(usingRefrechControl: Bool) {
+		_semaphoreArray.wait()
+		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+		_semaphoreArray.signal()
+		searchBar.resignFirstResponder()
+		searchBar.showsCancelButton = false
+		refreshButton.isEnabled = false
+		searchTag = tag
+		
+		_semaphoreThreads.wait()
+		DispatchQueue.global(qos: .background).async {
+			while (true) {
+				usleep(500000)
+				self._semaphoreArray.wait()
+				if (RandomGifsViewController.gifArray.count >= 10) {
+					self._semaphoreArray.signal()
+					DispatchQueue.main.async {
+						self.refreshToPull.endRefreshing()
+						self.refreshButton.isEnabled = true
+					}
+					break
+				}
+				self._semaphoreArray.signal()
+			}
+		}
+		_semaphoreThreads.signal()
+		_loadFirstGifs()
+	}
+
 	private func _loadFirstGifs() {
 		for _ in 0..<10 {
 			_semaphoreThreads.wait()
@@ -189,14 +266,6 @@ class RandomGifsViewController: UITableViewController {
 		return (UIScreen.main.bounds.width / 2 + 5 + searchBarOffset)
 	}
 	
-	private func _reloadGifList() {
-		_semaphoreArray.wait()
-		RandomGifsViewController.gifArray.removeAll()
-		_semaphoreArray.signal()
-		_loadFirstGifs()
-		
-	}
-	
 	private func _convertSearchTagToLinkFormat(tag: String) -> String {
 
 		let finalTag: String = tag.addingPercentEncoding(withAllowedCharacters: .urlQueryAllowed) ?? ""
@@ -208,9 +277,14 @@ extension RandomGifsViewController: UISearchBarDelegate {
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
 		searchBar.showsCancelButton = false
-		searchTag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
+		tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
+		searchTag = tag
+		tag = ""
 		searchBar.text! = ""
-		_reloadGifList()
+		_semaphoreArray.wait()
+		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+		_semaphoreArray.signal()
+		_loadFirstGifs()
 		print("Start searching..", searchTag, randomGifAPILink + searchTag + endLink)
 	}
 
