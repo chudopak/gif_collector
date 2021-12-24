@@ -25,6 +25,12 @@ class RandomGifsViewController: UITableViewController {
 	private var searchTag = ""
 	private var tag = ""
 	
+//	let longPressRecognizer: UITapGestureRecognizer = {
+//		let press = UITapGestureRecognizer(target: self, action: #selector(longPressButtonShow))
+//		press.numberOfTapsRequired = 1
+//		return (press)
+//	} ()
+	
 	lazy var refreshToPull: UIRefreshControl = {
 		var refreshControll = UIRefreshControl()
 		refreshControll.addTarget(self, action: #selector(_refreshControllerCalled), for: .valueChanged)
@@ -106,7 +112,6 @@ class RandomGifsViewController: UITableViewController {
 			RandomGifsViewController.isFirstLoad = false
 			_semaphoreArray.signal()
 			_refresh(refreshControlState: false)
-//			_loadFirstGifs()
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
 			_semaphoreArray.signal()
@@ -124,7 +129,6 @@ class RandomGifsViewController: UITableViewController {
 				case .dark:
 					return (UIColor(red: 0.19, green: 0.195, blue: 0.199, alpha: 1))
 				default:
-//					return (UIColor(red: 0.884, green: 0.911, blue: 0.478, alpha: 1))
 					return (UIColor(red: 0.945, green: 0.894, blue: 0.734, alpha: 1))
 				}
 			}
@@ -261,7 +265,7 @@ class RandomGifsViewController: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
 		let cell = tableView.dequeueReusableCell(withIdentifier: "GifTableViewCell", for: indexPath) as! GifTableViewCell
-
+		
 		var gifs: RowGifsData?
 		var topBarOffset: CGFloat = 0
 		if (indexPath.row == 0) {
@@ -311,8 +315,6 @@ extension RandomGifsViewController: UISearchBarDelegate {
 		if (_isAllGifsLoaded) {
 			_semaphoreIsAllGifsLoaded.signal()
 			tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
-//			searchTag = tag
-//			tag = ""
 			searchBar.text! = ""
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)

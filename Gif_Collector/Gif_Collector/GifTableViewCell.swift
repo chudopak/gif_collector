@@ -68,8 +68,9 @@ class GifTableViewCell: UITableViewCell {
 		return (image)
 	} ()
 	
-	let leftLoadingIndicator = UIActivityIndicatorView(style: .large)
-	let rightLoadingIndicator = UIActivityIndicatorView(style: .large)
+//	let leftLoadingIndicator = UIActivityIndicatorView(style: .large)
+//	let rightLoadingIndicator = UIActivityIndicatorView(style: .large)
+	
 	
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -81,13 +82,13 @@ class GifTableViewCell: UITableViewCell {
 				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
 			}
 		}
-		if (traitCollection.userInterfaceStyle == .light) {
-			leftLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
-			rightLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
-		} else {
-			rightLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
-			leftLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
-		}
+//		if (traitCollection.userInterfaceStyle == .light) {
+//			leftLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
+//			rightLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
+//		} else {
+//			rightLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
+//			leftLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
+//		}
 	}
 	
 	required init?(coder: NSCoder) {
