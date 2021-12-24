@@ -28,6 +28,7 @@ class ParseJSON {
 		guard let jsonDataUnwrapped = jsonData else {
 			return (nil)
 		}
+//		print(jsonDataUnwrapped)
 
 		guard let data = jsonDataUnwrapped["data"] as? [String: Any] else {
 			print("Expectred 'data' dictionary")

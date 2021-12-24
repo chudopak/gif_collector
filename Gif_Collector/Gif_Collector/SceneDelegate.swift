@@ -17,8 +17,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		
 		self.window = UIWindow(windowScene: windowScene)
-		let randomGifsViewController = RandomGifsViewController()
-		self.window!.rootViewController = randomGifsViewController
+//		let randomGifsViewController = RandomGifsViewController()
+		let tabBar = TabBar()
+		self.window!.rootViewController = tabBar
 		self.window!.makeKeyAndVisible()
 	}
 

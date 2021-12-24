@@ -41,14 +41,6 @@ class RandomGifsViewController: UITableViewController {
 				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
 			}
 		}
-		let titleColor = UIColor { tc in
-			switch tc.userInterfaceStyle {
-			case .dark:
-				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
-			default:
-				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
-			}
-		}
 		button.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
@@ -57,8 +49,10 @@ class RandomGifsViewController: UITableViewController {
 				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
 			}
 		}
-		button.setTitleColor(titleColor, for: .normal)
-		button.setImage(UIImage(named: "refresh"), for: .normal)
+		let refreshImageConfig = UIImage.SymbolConfiguration(pointSize: topBarHeight * 0.6,
+															 weight: .regular,
+															 scale: .medium)
+		button.setImage(UIImage(systemName: "arrow.clockwise", withConfiguration: refreshImageConfig), for: .normal)
 		button.addTarget(self, action: #selector(_refreshButtonPressed), for: .touchUpInside)
 		return (button)
 	} ()
@@ -111,7 +105,7 @@ class RandomGifsViewController: UITableViewController {
 			RandomGifsViewController.gifArray.reserveCapacity(50)
 			RandomGifsViewController.isFirstLoad = false
 			_semaphoreArray.signal()
-			_refresh(usingRefrechControl: false)
+			_refresh(refreshControlState: false)
 //			_loadFirstGifs()
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
@@ -130,7 +124,8 @@ class RandomGifsViewController: UITableViewController {
 				case .dark:
 					return (UIColor(red: 0.19, green: 0.195, blue: 0.199, alpha: 1))
 				default:
-					return (UIColor(red: 0.884, green: 0.911, blue: 0.478, alpha: 1))
+//					return (UIColor(red: 0.884, green: 0.911, blue: 0.478, alpha: 1))
+					return (UIColor(red: 0.945, green: 0.894, blue: 0.734, alpha: 1))
 				}
 			}
 		}
@@ -163,7 +158,7 @@ class RandomGifsViewController: UITableViewController {
 		_semaphoreIsAllGifsLoaded.wait()
 		if (_isAllGifsLoaded) {
 			_semaphoreIsAllGifsLoaded.signal()
-			_refresh(usingRefrechControl: true)
+			_refresh(refreshControlState: true)
 			return
 		}
 		_semaphoreIsAllGifsLoaded.signal()
@@ -174,33 +169,26 @@ class RandomGifsViewController: UITableViewController {
 		_semaphoreIsAllGifsLoaded.wait()
 		if (_isAllGifsLoaded) {
 			_semaphoreIsAllGifsLoaded.signal()
-			_refresh(usingRefrechControl: false)
+			_refresh(refreshControlState: false)
 			return
 		}
 		_semaphoreIsAllGifsLoaded.signal()
 	}
 	
-	private func _refresh(usingRefrechControl: Bool) {
-		_semaphoreArray.wait()
-		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
-		_semaphoreArray.signal()
-		searchBar.resignFirstResponder()
-		searchBar.showsCancelButton = false
-		refreshButton.isEnabled = false
-		searchTag = tag
+	private func _observer(refeshControlState: Bool) {
 		_semaphoreIsAllGifsLoaded.wait()
 		_isAllGifsLoaded = false
 		_semaphoreIsAllGifsLoaded.signal()
 		
 		DispatchQueue.global(qos: .background).async {
-			
+			var numberOfChecks = 0
 			while (true) {
 				usleep(500000)
 				self._semaphoreArray.wait()
-				if (RandomGifsViewController.gifArray.count >= 10) {
+				if (RandomGifsViewController.gifArray.count >= 10 || numberOfChecks >= 60) {
 					self._semaphoreArray.signal()
 					DispatchQueue.main.async {
-						if (usingRefrechControl) {
+						if (refeshControlState) {
 							self.refreshToPull.endRefreshing()
 						}
 						self.refreshButton.isEnabled = true
@@ -212,8 +200,21 @@ class RandomGifsViewController: UITableViewController {
 					break
 				}
 				self._semaphoreArray.signal()
+				numberOfChecks += 1
 			}
 		}
+	}
+	
+	private func _refresh(refreshControlState: Bool) {
+		_semaphoreArray.wait()
+		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+		_semaphoreArray.signal()
+		searchBar.resignFirstResponder()
+		searchBar.showsCancelButton = false
+		refreshButton.isEnabled = false
+		searchTag = tag
+		tag = ""
+		_observer(refeshControlState: refreshControlState)
 		_loadFirstGifs()
 	}
 
@@ -306,15 +307,22 @@ extension RandomGifsViewController: UISearchBarDelegate {
 	func searchBarSearchButtonClicked(_ searchBar: UISearchBar) {
 		searchBar.resignFirstResponder()
 		searchBar.showsCancelButton = false
-		tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
-		searchTag = tag
-		tag = ""
-		searchBar.text! = ""
-		_semaphoreArray.wait()
-		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
-		_semaphoreArray.signal()
-		_loadFirstGifs()
-		print("Start searching..", searchTag, randomGifAPILink + searchTag + endLink)
+		_semaphoreIsAllGifsLoaded.wait()
+		if (_isAllGifsLoaded) {
+			_semaphoreIsAllGifsLoaded.signal()
+			tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
+//			searchTag = tag
+//			tag = ""
+			searchBar.text! = ""
+			_semaphoreArray.wait()
+			RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+			_semaphoreArray.signal()
+			_refresh(refreshControlState: false)
+			print("Start searching..", searchTag, randomGifAPILink + searchTag + endLink)
+		} else {
+			_semaphoreIsAllGifsLoaded.signal()
+			searchBar.text! = ""
+		}
 	}
 
 	func searchBarCancelButtonClicked(_ searchBar: UISearchBar) {
