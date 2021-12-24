@@ -15,7 +15,10 @@ class RandomGifsViewController: UITableViewController {
 	static private var gifArraySize = 0
 	
 	private let _semaphoreArray = DispatchSemaphore(value: 1)
-	private let _semaphoreThreads = DispatchSemaphore(value: 4)
+	private let _semaphoreThreads = DispatchSemaphore(value: 2)
+	private let _semaphoreIsAllGifsLoaded = DispatchSemaphore(value: 1)
+	
+	private var _isAllGifsLoaded = true
 	
 	private let parse = ParseJSON()
 	
@@ -108,7 +111,8 @@ class RandomGifsViewController: UITableViewController {
 			RandomGifsViewController.gifArray.reserveCapacity(50)
 			RandomGifsViewController.isFirstLoad = false
 			_semaphoreArray.signal()
-			_loadFirstGifs()
+			_refresh(usingRefrechControl: false)
+//			_loadFirstGifs()
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
 			_semaphoreArray.signal()
@@ -156,11 +160,24 @@ class RandomGifsViewController: UITableViewController {
 	}
 
 	@objc private func _refreshControllerCalled(sender: UIRefreshControl) {
-		_refresh(usingRefrechControl: true)
+		_semaphoreIsAllGifsLoaded.wait()
+		if (_isAllGifsLoaded) {
+			_semaphoreIsAllGifsLoaded.signal()
+			_refresh(usingRefrechControl: true)
+			return
+		}
+		_semaphoreIsAllGifsLoaded.signal()
+		refreshToPull.endRefreshing()
 	}
 	
 	@objc private func _refreshButtonPressed() {
-		_refresh(usingRefrechControl: false)
+		_semaphoreIsAllGifsLoaded.wait()
+		if (_isAllGifsLoaded) {
+			_semaphoreIsAllGifsLoaded.signal()
+			_refresh(usingRefrechControl: false)
+			return
+		}
+		_semaphoreIsAllGifsLoaded.signal()
 	}
 	
 	private func _refresh(usingRefrechControl: Bool) {
@@ -171,52 +188,64 @@ class RandomGifsViewController: UITableViewController {
 		searchBar.showsCancelButton = false
 		refreshButton.isEnabled = false
 		searchTag = tag
+		_semaphoreIsAllGifsLoaded.wait()
+		_isAllGifsLoaded = false
+		_semaphoreIsAllGifsLoaded.signal()
 		
-		_semaphoreThreads.wait()
 		DispatchQueue.global(qos: .background).async {
+			
 			while (true) {
 				usleep(500000)
 				self._semaphoreArray.wait()
 				if (RandomGifsViewController.gifArray.count >= 10) {
 					self._semaphoreArray.signal()
 					DispatchQueue.main.async {
-						self.refreshToPull.endRefreshing()
+						if (usingRefrechControl) {
+							self.refreshToPull.endRefreshing()
+						}
 						self.refreshButton.isEnabled = true
+						
+						self._semaphoreIsAllGifsLoaded.wait()
+						self._isAllGifsLoaded = true
+						self._semaphoreIsAllGifsLoaded.signal()
 					}
 					break
 				}
 				self._semaphoreArray.signal()
 			}
 		}
-		_semaphoreThreads.signal()
 		_loadFirstGifs()
 	}
 
 	private func _loadFirstGifs() {
-		for _ in 0..<10 {
-			_semaphoreThreads.wait()
-			DispatchQueue.global(qos: .userInitiated).async {
-				guard let leftGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
-					return
-				}
-				guard let rightGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
-					return
-				}
+		DispatchQueue.global(qos: .userInitiated).async {
+			for _ in 0..<10 {
+				self._semaphoreThreads.wait()
+				DispatchQueue.global(qos: .userInitiated).async {
+					guard let leftGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
+						print("Left gif doesn't load")
+						return
+					}
+					guard let rightGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
+						print("right gif doesn't load")
+						return
+					}
 
-				let rowGifs = RowGifsData(leftGif: leftGifData, rightGif: rightGifData)
-				
-				self._semaphoreArray.wait()
-				RandomGifsViewController.gifArray.append(rowGifs)
-				self._semaphoreArray.signal()
+					let rowGifs = RowGifsData(leftGif: leftGifData, rightGif: rightGifData)
+					
+					self._semaphoreArray.wait()
+					RandomGifsViewController.gifArray.append(rowGifs)
+					self._semaphoreArray.signal()
 
-				self._semaphoreArray.wait()
-				RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
-				self._semaphoreArray.signal()
-				DispatchQueue.main.async {
-					self.tableView.reloadData()
+					self._semaphoreArray.wait()
+					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+					self._semaphoreArray.signal()
+					DispatchQueue.main.async {
+						self.tableView.reloadData()
+					}
 				}
+				self._semaphoreThreads.signal()
 			}
-			_semaphoreThreads.signal()
 		}
 	}
 	
