@@ -12,5 +12,8 @@ let randomGifAPILink = "https://api.giphy.com/v1/gifs/random?api_key=3uMK0zrprPJ
 let endLink = "&rating=g"
 let topBarHeight: CGFloat = 50
 
+let darkThemeBackgroundColor = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
+let lightThemeBackgroundColor = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
+
 let gifVerticalOffset: CGFloat = 10
 let gifHorizontalOffset: CGFloat = 10

@@ -15,12 +15,14 @@
 		7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */; };
 		7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */; };
 		7D3A28E52771F06D00FC00F0 /* RowGifsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */; };
+		7D8C6F582777182E0066A925 /* SaveItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8C6F572777182E0066A925 /* SaveItemViewController.swift */; };
+		7D8C6F5A277758710066A925 /* HudViewSaveItemViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D8C6F59277758710066A925 /* HudViewSaveItemViewController.swift */; };
 		7D96E101276CBC3D00DD8E78 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */; };
 		7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */; };
 		7D96E105276CBC3D00DD8E78 /* RandomGifsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E104276CBC3D00DD8E78 /* RandomGifsViewController.swift */; };
 		7D96E10D276CBC3E00DD8E78 /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 7D96E10C276CBC3E00DD8E78 /* Assets.xcassets */; };
 		7D96E110276CBC3E00DD8E78 /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 7D96E10E276CBC3E00DD8E78 /* LaunchScreen.storyboard */; };
-		7D96E118276CD03D00DD8E78 /* GifTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */; };
+		7D96E118276CD03D00DD8E78 /* RandomGifsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D96E117276CD03D00DD8E78 /* RandomGifsTableViewCell.swift */; };
 		7D96E11A276CF03C00DD8E78 /* giphy.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D96E119276CF03C00DD8E78 /* giphy.gif */; };
 		7DC45BC92775DFE5008C15F4 /* TabBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC45BC82775DFE5008C15F4 /* TabBar.swift */; };
 		7DC45BCB2775E718008C15F4 /* SavedGifsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7DC45BCA2775E718008C15F4 /* SavedGifsViewController.swift */; };
@@ -36,6 +38,8 @@
 		7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseJSON.swift; sourceTree = "<group>"; };
 		7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsValues.swift; sourceTree = "<group>"; };
 		7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowGifsData.swift; sourceTree = "<group>"; };
+		7D8C6F572777182E0066A925 /* SaveItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SaveItemViewController.swift; sourceTree = "<group>"; };
+		7D8C6F59277758710066A925 /* HudViewSaveItemViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HudViewSaveItemViewController.swift; sourceTree = "<group>"; };
 		7D96E0FD276CBC3D00DD8E78 /* Gif_Collector.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Gif_Collector.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
@@ -43,7 +47,7 @@
 		7D96E10C276CBC3E00DD8E78 /* Assets.xcassets */ = {isa = PBXFileReference; lastKnownFileType = folder.assetcatalog; path = Assets.xcassets; sourceTree = "<group>"; };
 		7D96E10F276CBC3E00DD8E78 /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		7D96E111276CBC3E00DD8E78 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GifTableViewCell.swift; sourceTree = "<group>"; };
+		7D96E117276CD03D00DD8E78 /* RandomGifsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RandomGifsTableViewCell.swift; sourceTree = "<group>"; };
 		7D96E119276CF03C00DD8E78 /* giphy.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = giphy.gif; sourceTree = "<group>"; };
 		7DC45BC82775DFE5008C15F4 /* TabBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TabBar.swift; sourceTree = "<group>"; };
 		7DC45BCA2775E718008C15F4 /* SavedGifsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SavedGifsViewController.swift; sourceTree = "<group>"; };
@@ -115,12 +119,14 @@
 				7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */,
 				7D96E102276CBC3D00DD8E78 /* SceneDelegate.swift */,
 				7D96E104276CBC3D00DD8E78 /* RandomGifsViewController.swift */,
+				7D8C6F572777182E0066A925 /* SaveItemViewController.swift */,
+				7D8C6F59277758710066A925 /* HudViewSaveItemViewController.swift */,
 				7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */,
 				7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */,
 				7DC45BC82775DFE5008C15F4 /* TabBar.swift */,
 				7DC45BCA2775E718008C15F4 /* SavedGifsViewController.swift */,
 				7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */,
-				7D96E117276CD03D00DD8E78 /* GifTableViewCell.swift */,
+				7D96E117276CD03D00DD8E78 /* RandomGifsTableViewCell.swift */,
 				7D96E10C276CBC3E00DD8E78 /* Assets.xcassets */,
 				7D96E10E276CBC3E00DD8E78 /* LaunchScreen.storyboard */,
 				7D96E111276CBC3E00DD8E78 /* Info.plist */,
@@ -259,10 +265,12 @@
 				7D96E105276CBC3D00DD8E78 /* RandomGifsViewController.swift in Sources */,
 				7D96E101276CBC3D00DD8E78 /* AppDelegate.swift in Sources */,
 				7DC45BC92775DFE5008C15F4 /* TabBar.swift in Sources */,
-				7D96E118276CD03D00DD8E78 /* GifTableViewCell.swift in Sources */,
+				7D96E118276CD03D00DD8E78 /* RandomGifsTableViewCell.swift in Sources */,
 				7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */,
 				7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */,
 				7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */,
+				7D8C6F582777182E0066A925 /* SaveItemViewController.swift in Sources */,
+				7D8C6F5A277758710066A925 /* HudViewSaveItemViewController.swift in Sources */,
 				7DC45BCB2775E718008C15F4 /* SavedGifsViewController.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

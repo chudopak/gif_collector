@@ -25,9 +25,10 @@ class RandomGifsViewController: UITableViewController {
 	private var searchTag = ""
 	private var tag = ""
 	
-//	let longPressRecognizer: UITapGestureRecognizer = {
-//		let press = UITapGestureRecognizer(target: self, action: #selector(longPressButtonShow))
+//	private let longPressRecognizer: UITapGestureRecognizer = {
+//		let press = UITapGestureRecognizer(target: self, action: #selector(longPress))
 //		press.numberOfTapsRequired = 1
+//		press.numberOfTouchesRequired = 1
 //		return (press)
 //	} ()
 	
@@ -42,9 +43,9 @@ class RandomGifsViewController: UITableViewController {
 		button.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 		button.tintColor = UIColor { tc in
@@ -78,9 +79,9 @@ class RandomGifsViewController: UITableViewController {
 		searchBar.barTintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 		searchBar.tintColor = UIColor { tc in
@@ -94,9 +95,9 @@ class RandomGifsViewController: UITableViewController {
 		searchBar.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 		return (searchBar)
@@ -104,8 +105,8 @@ class RandomGifsViewController: UITableViewController {
 	
 	override func viewDidLoad() {
 		super.viewDidLoad()
-		_setUpTableView()
-		_setUpTopBarView()
+		_setTableView()
+		_setTopBarView()
 		if (RandomGifsViewController.isFirstLoad) {
 			_semaphoreArray.wait()
 			RandomGifsViewController.gifArray.reserveCapacity(50)
@@ -118,7 +119,7 @@ class RandomGifsViewController: UITableViewController {
 		}
 	}
 	
-	private func _setUpTopBarView() {
+	private func _setTopBarView() {
 		view.addSubview(topBarView)
 		topBarView.addSubview(searchBar)
 		topBarView.addSubview(refreshButton)
@@ -143,7 +144,7 @@ class RandomGifsViewController: UITableViewController {
 									 height: topBarHeight)
 	}
 	
-	private func _setUpTableView() {
+	private func _setTableView() {
 		tableView.refreshControl = refreshToPull
 		tableView.separatorColor = .none
 		tableView.separatorStyle = .none
@@ -151,11 +152,12 @@ class RandomGifsViewController: UITableViewController {
 		tableView.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
+		tableView.allowsSelection = true
 	}
 
 	@objc private func _refreshControllerCalled(sender: UIRefreshControl) {
@@ -298,6 +300,23 @@ class RandomGifsViewController: UITableViewController {
 			return (cellHeight + searchBarOffset)
 		}
 		return (UIScreen.main.bounds.width / 2 + 5 + searchBarOffset)
+	}
+	
+	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		tableView.deselectRow(at: indexPath, animated: true)
+		_semaphoreArray.wait()
+		if (indexPath.row < RandomGifsViewController.gifArray.count) {
+			let gifs = RandomGifsViewController.gifArray[indexPath.row]
+			_semaphoreArray.signal()
+			let saveItemViewController = SaveItemViewController()
+			saveItemViewController.firstGif = gifs.leftGif
+			saveItemViewController.secondGif = gifs.rightGif
+			let navigationController = UINavigationController(rootViewController: saveItemViewController)
+			navigationController.modalPresentationStyle = .fullScreen
+			present(navigationController, animated: true, completion: nil)
+		} else {
+			_semaphoreArray.signal()
+		}
 	}
 	
 	private func _convertSearchTagToLinkFormat(tag: String) -> String {

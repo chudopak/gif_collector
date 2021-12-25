@@ -11,7 +11,7 @@ import Gifu
 
 class GifTableViewCell: UITableViewCell {
 	
-	let leftView: UIView = {
+	private let leftView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -21,16 +21,16 @@ class GifTableViewCell: UITableViewCell {
 		v.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 		v.clipsToBounds = true
 		return (v)
 	}()
 	
-	let rightView: UIView = {
+	private let rightView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -40,16 +40,16 @@ class GifTableViewCell: UITableViewCell {
 		v.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 		v.clipsToBounds = true
 		return (v)
 	}()
 
-	let leftGifImageView: GIFImageView = {
+	private let leftGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -58,7 +58,7 @@ class GifTableViewCell: UITableViewCell {
 		return (image)
 	} ()
 	
-	let rightGifImageView: GIFImageView = {
+	private let rightGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -77,17 +77,17 @@ class GifTableViewCell: UITableViewCell {
 		contentView.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 //		if (traitCollection.userInterfaceStyle == .light) {
-//			leftLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
-//			rightLoadingIndicator.color = UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1)
+//			leftLoadingIndicator.color = lightThemeBackgroundColor
+//			rightLoadingIndicator.color = lightThemeBackgroundColor
 //		} else {
-//			rightLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
-//			leftLoadingIndicator.color = UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1)
+//			rightLoadingIndicator.color = darkThemeBackgroundColor
+//			leftLoadingIndicator.color = darkThemeBackgroundColor
 //		}
 	}
 	
@@ -96,9 +96,9 @@ class GifTableViewCell: UITableViewCell {
 		contentView.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
+				return (darkThemeBackgroundColor)
 			default:
-				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
+				return (lightThemeBackgroundColor)
 			}
 		}
 	}

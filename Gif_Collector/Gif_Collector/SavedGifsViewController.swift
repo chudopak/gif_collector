@@ -59,8 +59,10 @@ extension SavedGifsViewController: UITableViewDelegate, UITableViewDataSource {
 		
 		return (cell)
 	}
-	
-	
+//	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+//		tableView.deselectRow(at: indexPath, animated: true)
+//		print(indexPath.row)
+//	}
 }
 
 class SavedGifsViewController: UIViewController {
@@ -81,14 +83,12 @@ class SavedGifsViewController: UIViewController {
 		tableView.dataSource = self
 		tableView.register(SavedGifTableViewCell.self, forCellReuseIdentifier: SavedGifTableViewCell.identifier)
 		view.addSubview(tableView)
-        // Do any additional setup after loading the view.
     }
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
 		tableView.frame = view.bounds
 	}
-    
 
     /*
     // MARK: - Navigation
