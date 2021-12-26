@@ -6,9 +6,10 @@
 //
 
 import UIKit
+import CoreData
 
 class TabBar: UITabBarController {
-
+	
     override func viewDidLoad() {
         super.viewDidLoad()
 		UITabBar.appearance().barTintColor = .systemBackground
@@ -47,8 +48,6 @@ class TabBar: UITabBarController {
 			print("Can't get items from tabBar")
 			return
 		}
-		
-//		let searchConfig = UIImage.SymbolConfiguration(pointSize: 100, weight: .bold, scale: .large)
 		
 		items[0].image = UIImage(systemName: "star")
 		items[1].image = UIImage(systemName: "magnifyingglass.circle")

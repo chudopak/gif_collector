@@ -8,10 +8,15 @@
 
 /* Begin PBXBuildFile section */
 		70D6C05076C1F83ED68ACAE5 /* Pods_Gif_Collector.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 67B2B4D003AF3987E3F311DB /* Pods_Gif_Collector.framework */; };
+		7D28E80E2778928F00DF0566 /* Gif+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D28E80A2778928F00DF0566 /* Gif+CoreDataClass.swift */; };
+		7D28E80F2778928F00DF0566 /* Gif+CoreDataClass.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D28E80D2778928F00DF0566 /* Gif+CoreDataClass.swift */; };
+		7D28E8102778928F00DF0566 /* Gif+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D28E80C2778928F00DF0566 /* Gif+CoreDataProperties.swift */; };
+		7D28E8112778928F00DF0566 /* Gif+CoreDataProperties.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D28E80B2778928F00DF0566 /* Gif+CoreDataProperties.swift */; };
 		7D3749E12773506200FEFE50 /* ColoredLoadingCircle.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D3749DF2773506200FEFE50 /* ColoredLoadingCircle.gif */; };
 		7D3749E22773506200FEFE50 /* loadingPNGCircles.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D3749E02773506200FEFE50 /* loadingPNGCircles.gif */; };
 		7D3749E62773513200FEFE50 /* GreenCircle.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D3749E42773513100FEFE50 /* GreenCircle.gif */; };
 		7D3749E72773513200FEFE50 /* RedGrenCircle.gif in Resources */ = {isa = PBXBuildFile; fileRef = 7D3749E52773513200FEFE50 /* RedGrenCircle.gif */; };
+		7D381E74277864010069595F /* GifDataModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 7D381E72277864010069595F /* GifDataModel.xcdatamodeld */; };
 		7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */; };
 		7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */; };
 		7D3A28E52771F06D00FC00F0 /* RowGifsData.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */; };
@@ -31,10 +36,15 @@
 /* Begin PBXFileReference section */
 		0DB2033D903327389BDD2336 /* Pods-Gif_Collector.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Gif_Collector.debug.xcconfig"; path = "Target Support Files/Pods-Gif_Collector/Pods-Gif_Collector.debug.xcconfig"; sourceTree = "<group>"; };
 		67B2B4D003AF3987E3F311DB /* Pods_Gif_Collector.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Gif_Collector.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		7D28E80A2778928F00DF0566 /* Gif+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Gif+CoreDataClass.swift"; sourceTree = "<group>"; };
+		7D28E80B2778928F00DF0566 /* Gif+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Gif+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7D28E80C2778928F00DF0566 /* Gif+CoreDataProperties.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Gif+CoreDataProperties.swift"; sourceTree = "<group>"; };
+		7D28E80D2778928F00DF0566 /* Gif+CoreDataClass.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = "Gif+CoreDataClass.swift"; sourceTree = "<group>"; };
 		7D3749DF2773506200FEFE50 /* ColoredLoadingCircle.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = ColoredLoadingCircle.gif; sourceTree = "<group>"; };
 		7D3749E02773506200FEFE50 /* loadingPNGCircles.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = loadingPNGCircles.gif; sourceTree = "<group>"; };
 		7D3749E42773513100FEFE50 /* GreenCircle.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = GreenCircle.gif; sourceTree = "<group>"; };
 		7D3749E52773513200FEFE50 /* RedGrenCircle.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = RedGrenCircle.gif; sourceTree = "<group>"; };
+		7D381E73277864010069595F /* GifDataModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = GifDataModel.xcdatamodel; sourceTree = "<group>"; };
 		7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ParseJSON.swift; sourceTree = "<group>"; };
 		7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ConstantsValues.swift; sourceTree = "<group>"; };
 		7D3A28E42771F06D00FC00F0 /* RowGifsData.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RowGifsData.swift; sourceTree = "<group>"; };
@@ -74,6 +84,17 @@
 			name = Frameworks;
 			sourceTree = "<group>";
 		};
+		7D28E8092778928F00DF0566 /* GifDataModel */ = {
+			isa = PBXGroup;
+			children = (
+				7D28E80A2778928F00DF0566 /* Gif+CoreDataClass.swift */,
+				7D28E80D2778928F00DF0566 /* Gif+CoreDataClass.swift */,
+				7D28E80C2778928F00DF0566 /* Gif+CoreDataProperties.swift */,
+				7D28E80B2778928F00DF0566 /* Gif+CoreDataProperties.swift */,
+			);
+			path = GifDataModel;
+			sourceTree = "<group>";
+		};
 		7D3749E32773510D00FEFE50 /* DarkThemeLoadingGifs */ = {
 			isa = PBXGroup;
 			children = (
@@ -93,9 +114,18 @@
 			path = LightThemeLoadingGifs;
 			sourceTree = "<group>";
 		};
+		7D381E70277862FC0069595F /* GifDataModel */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			name = GifDataModel;
+			path = ../GifDataModel;
+			sourceTree = "<group>";
+		};
 		7D96E0F4276CBC3D00DD8E78 = {
 			isa = PBXGroup;
 			children = (
+				7D28E8092778928F00DF0566 /* GifDataModel */,
 				7D96E0FF276CBC3D00DD8E78 /* Gif_Collector */,
 				7D96E0FE276CBC3D00DD8E78 /* Products */,
 				DBAB35AFBA9236776AE75D89 /* Pods */,
@@ -114,6 +144,7 @@
 		7D96E0FF276CBC3D00DD8E78 /* Gif_Collector */ = {
 			isa = PBXGroup;
 			children = (
+				7D381E70277862FC0069595F /* GifDataModel */,
 				7D3749E82773551B00FEFE50 /* LightThemeLoadingGifs */,
 				7D3749E32773510D00FEFE50 /* DarkThemeLoadingGifs */,
 				7D96E100276CBC3D00DD8E78 /* AppDelegate.swift */,
@@ -122,6 +153,7 @@
 				7D8C6F572777182E0066A925 /* SaveItemViewController.swift */,
 				7D8C6F59277758710066A925 /* HudViewSaveItemViewController.swift */,
 				7D3A28E22771DF7D00FC00F0 /* ConstantsValues.swift */,
+				7D381E72277864010069595F /* GifDataModel.xcdatamodeld */,
 				7D3A28E02771DCF300FC00F0 /* ParseJSON.swift */,
 				7DC45BC82775DFE5008C15F4 /* TabBar.swift */,
 				7DC45BCA2775E718008C15F4 /* SavedGifsViewController.swift */,
@@ -266,7 +298,12 @@
 				7D96E101276CBC3D00DD8E78 /* AppDelegate.swift in Sources */,
 				7DC45BC92775DFE5008C15F4 /* TabBar.swift in Sources */,
 				7D96E118276CD03D00DD8E78 /* RandomGifsTableViewCell.swift in Sources */,
+				7D28E80E2778928F00DF0566 /* Gif+CoreDataClass.swift in Sources */,
+				7D28E80F2778928F00DF0566 /* Gif+CoreDataClass.swift in Sources */,
 				7D96E103276CBC3D00DD8E78 /* SceneDelegate.swift in Sources */,
+				7D28E8112778928F00DF0566 /* Gif+CoreDataProperties.swift in Sources */,
+				7D28E8102778928F00DF0566 /* Gif+CoreDataProperties.swift in Sources */,
+				7D381E74277864010069595F /* GifDataModel.xcdatamodeld in Sources */,
 				7D3A28E32771DF7D00FC00F0 /* ConstantsValues.swift in Sources */,
 				7D3A28E12771DCF300FC00F0 /* ParseJSON.swift in Sources */,
 				7D8C6F582777182E0066A925 /* SaveItemViewController.swift in Sources */,
@@ -467,6 +504,19 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCVersionGroup section */
+		7D381E72277864010069595F /* GifDataModel.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				7D381E73277864010069595F /* GifDataModel.xcdatamodel */,
+			);
+			currentVersion = 7D381E73277864010069595F /* GifDataModel.xcdatamodel */;
+			path = GifDataModel.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 7D96E0F5276CBC3D00DD8E78 /* Project object */;
 }

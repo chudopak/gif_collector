@@ -7,9 +7,12 @@
 
 import UIKit
 import Dispatch
+import CoreData
 
 class RandomGifsViewController: UITableViewController {
 
+	var managedObjectContext: NSManagedObjectContext!
+	
 	static private var gifArray = [RowGifsData]()
 	static private var isFirstLoad = true
 	static private var gifArraySize = 0
@@ -302,6 +305,14 @@ class RandomGifsViewController: UITableViewController {
 			let gifs = RandomGifsViewController.gifArray[indexPath.row]
 			_semaphoreArray.signal()
 			let saveItemViewController = SaveItemViewController()
+			if (managedObjectContext != nil) {
+				saveItemViewController.managedObjectContext = managedObjectContext
+			}
+			else {
+				print()
+				print("Bad news")
+				print()
+			}
 			saveItemViewController.firstGif = gifs.leftGif
 			saveItemViewController.secondGif = gifs.rightGif
 			let navigationController = UINavigationController(rootViewController: saveItemViewController)
@@ -350,50 +361,3 @@ extension RandomGifsViewController: UISearchBarDelegate {
 		print("realy start Editing")
 	}
 }
-
-
-
-//				print("width - \(rowGifs.leftGif.pixelSize.width) height - \(rowGifs.leftGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
-//
-//					new Point Size width -  \(rowGifs.leftGif.pointSize.width) height - \(rowGifs.leftGif.pointSize.height)
-//
-//					""")
-//				print("width - \(rowGifs.rightGif.pixelSize.width) height - \(rowGifs.rightGif.pixelSize.height) cell height - \(rowGifs.cellHeight)", """
-//
-//					new Point Size width -  \(rowGifs.rightGif.pointSize.width) height - \(rowGifs.rightGif.pointSize.height)
-//
-//					""")
-
-//		finalTag = finalTag.replacingOccurrences(of: "%", with: "%25")
-//
-//		finalTag = finalTag.replacingOccurrences(of: "\'", with: "%27", options: .literal, range: nil)
-//		finalTag = finalTag.replacingOccurrences(of: "'", with: "%27")
-//		finalTag = finalTag.replacingOccurrences(of: "+", with: "%2B")
-//		finalTag = finalTag.replacingOccurrences(of: " ", with: "+")
-//		finalTag = finalTag.replacingOccurrences(of: "/", with: "%2F")
-//		finalTag = finalTag.replacingOccurrences(of: "?", with: "%3F")
-//		finalTag = finalTag.replacingOccurrences(of: ">", with: "%3E")
-//		finalTag = finalTag.replacingOccurrences(of: "<", with: "%3C")
-//		finalTag = finalTag.replacingOccurrences(of: ",", with: "%2C")
-//		finalTag = finalTag.replacingOccurrences(of: "`", with: "%60")
-//		finalTag = finalTag.replacingOccurrences(of: "~", with: "%7E")
-//		finalTag = finalTag.replacingOccurrences(of: "=", with: "%3D")
-//		finalTag = finalTag.replacingOccurrences(of: "!", with: "%21")
-//		finalTag = finalTag.replacingOccurrences(of: "@", with: "%40")
-//		finalTag = finalTag.replacingOccurrences(of: "#", with: "%23")
-//		finalTag = finalTag.replacingOccurrences(of: "$", with: "%24")
-//		finalTag = finalTag.replacingOccurrences(of: "^", with: "%5E")
-//		finalTag = finalTag.replacingOccurrences(of: "&", with: "%26")
-//		finalTag = finalTag.replacingOccurrences(of: "(", with: "%28")
-//		finalTag = finalTag.replacingOccurrences(of: ")", with: "%29")
-//		finalTag = finalTag.replacingOccurrences(of: "{", with: "%7B")
-//		finalTag = finalTag.replacingOccurrences(of: "}", with: "%7D")
-//		finalTag = finalTag.replacingOccurrences(of: "[", with: "%5B")
-//		finalTag = finalTag.replacingOccurrences(of: "]", with: "%5D")
-//		finalTag = finalTag.replacingOccurrences(of: "|", with: "%7C")
-//		finalTag = finalTag.replacingOccurrences(of: "\\", with: "%5C")
-//		finalTag = finalTag.replacingOccurrences(of: ";", with: "%3B")
-//		finalTag = finalTag.replacingOccurrences(of: ":", with: "%3A")
-//
-//		finalTag = finalTag.replacingOccurrences(of: "\"", with: "%22")
-//		finalTag = finalTag.replacingOccurrences(of: ":", with: "%3A")

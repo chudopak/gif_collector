@@ -7,6 +7,7 @@
 
 import UIKit
 import Gifu
+import CoreData
 
 protocol SaveItemViewControllerDelegate: AnyObject {
 	func shouldSaveGifDelegate(isFirst: Bool, shouldSave: Bool)
@@ -195,6 +196,8 @@ extension SaveItemViewController: UITableViewDelegate, UITableViewDataSource {
 
 class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 
+	var managedObjectContext: NSManagedObjectContext!
+	
 	private let tableView = UITableView()
 	
 	var firstGif: GifData!
@@ -292,6 +295,33 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 		} else {
 			hudView.isAnythingToSave = false
 			hudView.text = "no saves"
+		}
+		if (_shouldSaveFirst) {
+			let coreDataFirstGif = Gif(context: managedObjectContext)
+			
+			coreDataFirstGif.gifData = firstGif.gif
+			coreDataFirstGif.gifPixelWidth = Int32(firstGif.pixelSize.width)
+			coreDataFirstGif.gifPixelHeight = Int32(firstGif.pixelSize.height)
+			
+			do {
+				try managedObjectContext.save()
+			} catch {
+				fatalError("Could load data store \(error)")
+			}
+		}
+		
+		if (_shouldSaveSecond) {
+			let coreDataSecondGif = Gif(context: managedObjectContext)
+			
+			coreDataSecondGif.gifData = secondGif.gif
+			coreDataSecondGif.gifPixelWidth = Int32(secondGif.pixelSize.width)
+			coreDataSecondGif.gifPixelHeight = Int32(secondGif.pixelSize.height)
+			
+			do {
+				try managedObjectContext.save()
+			} catch {
+				fatalError("Could load data store \(error)")
+			}
 		}
 		
 		

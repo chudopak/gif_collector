@@ -6,21 +6,34 @@
 //
 
 import UIKit
+import CoreData
 
 class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 	var window: UIWindow?
 
+	lazy var persistentContainer: NSPersistentContainer = {
+		let container = NSPersistentContainer(name: "GifDataModel")
+		container.loadPersistentStores(completionHandler: {
+			storeDescription, error in
+			if let error = error {
+				fatalError("Could load data store \(error)")
+			}
+		})
+		return (container)
+	}()
+	
+	lazy var managedObjectContext: NSManagedObjectContext = self.persistentContainer.viewContext
 
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		
 		self.window = UIWindow(windowScene: windowScene)
-//		let randomGifsViewController = RandomGifsViewController()
 		let tabBar = TabBar()
 		self.window!.rootViewController = tabBar
 		self.window!.makeKeyAndVisible()
+		_passManagedObjectContextToViewControllers()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {
@@ -53,7 +66,18 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Save changes in the application's managed object context when the application transitions to the background.
 		(UIApplication.shared.delegate as? AppDelegate)?.saveContext()
 	}
-
+	
+	private func _passManagedObjectContextToViewControllers() {
+		let tabBarController = window!.rootViewController as! TabBar
+		
+		if let tabBarViewControllers = tabBarController.viewControllers {
+			let currentLocationViewController = tabBarViewControllers[0] as! SavedGifsViewController
+			currentLocationViewController.managedObjectContext = managedObjectContext
+			
+			let controller2 = tabBarViewControllers[1] as! RandomGifsViewController
+			controller2.managedObjectContext = managedObjectContext
+		}
+	}
 
 }
 

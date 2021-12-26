@@ -6,7 +6,7 @@
 //
 
 import UIKit
-
+import CoreData
 
 class SavedGifTableViewCell: UITableViewCell {
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
@@ -66,7 +66,9 @@ extension SavedGifsViewController: UITableViewDelegate, UITableViewDataSource {
 }
 
 class SavedGifsViewController: UIViewController {
-
+	
+	var managedObjectContext: NSManagedObjectContext!
+	
 	let tableView = UITableView()
 	
     override func viewDidLoad() {
