@@ -74,9 +74,9 @@ class SaveItemTableViewCell: UITableViewCell {
 		button.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+				return (darkThemeTintColor)
 			default:
-				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+				return (lightThemeTintColor)
 			}
 		}
 		button.setImage(UIImage(systemName: "circle", withConfiguration: _saveButtonImageConfig), for: .normal)
@@ -245,9 +245,9 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 		navigationController?.navigationBar.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+				return (darkThemeTintColor)
 			default:
-				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+				return (lightThemeTintColor)
 			}
 		}
 	}
@@ -286,11 +286,18 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 	
 	@objc func save() {
 		let hudView = HudView.hud(inView: navigationController!.view, animated: true)
-		hudView.text = "saved"
+		if (_shouldSaveSecond || _shouldSaveFirst) {
+			hudView.isAnythingToSave = true
+			hudView.text = "saved"
+		} else {
+			hudView.isAnythingToSave = false
+			hudView.text = "no saves"
+		}
+		
+		
 		DispatchQueue.global().async {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {
 				self.dismiss(animated: true, completion: nil)
-				print("we here")
 			}
 		}
 	}
@@ -301,6 +308,5 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 		} else {
 			_shouldSaveSecond = shouldSave
 		}
-		print(shouldSave)
 	}
 }

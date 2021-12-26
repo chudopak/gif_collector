@@ -25,13 +25,6 @@ class RandomGifsViewController: UITableViewController {
 	private var searchTag = ""
 	private var tag = ""
 	
-//	private let longPressRecognizer: UITapGestureRecognizer = {
-//		let press = UITapGestureRecognizer(target: self, action: #selector(longPress))
-//		press.numberOfTapsRequired = 1
-//		press.numberOfTouchesRequired = 1
-//		return (press)
-//	} ()
-	
 	lazy var refreshToPull: UIRefreshControl = {
 		var refreshControll = UIRefreshControl()
 		refreshControll.addTarget(self, action: #selector(_refreshControllerCalled), for: .valueChanged)
@@ -51,9 +44,9 @@ class RandomGifsViewController: UITableViewController {
 		button.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+				return (darkThemeTintColor)
 			default:
-				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+				return (lightThemeTintColor)
 			}
 		}
 		let refreshImageConfig = UIImage.SymbolConfiguration(pointSize: topBarHeight * 0.6,
@@ -87,9 +80,9 @@ class RandomGifsViewController: UITableViewController {
 		searchBar.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
-				return (UIColor(red: 0.976, green: 0.738, blue: 0.184, alpha: 1))
+				return (darkThemeTintColor)
 			default:
-				return (UIColor(red: 0.347, green: 0.16, blue: 0.367, alpha: 1))
+				return (lightThemeTintColor)
 			}
 		}
 		searchBar.backgroundColor = UIColor { tc in
