@@ -2,12 +2,6 @@
 <Workspace
    version = "1.0">
    <FileRef
-      location = "group:GifDataModel/Gif+CoreDataClass.swift">
-   </FileRef>
-   <FileRef
-      location = "group:GifDataModel/Gif+CoreDataProperties.swift">
-   </FileRef>
-   <FileRef
       location = "group:Gif_Collector.xcodeproj">
    </FileRef>
    <FileRef
