@@ -62,8 +62,8 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 	private var _shouldSaveFirst: Bool = false
 	private var _shouldSaveSecond: Bool = false
 	
-	let availableCellWidth: CGFloat = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
-	let availableCellHeight: CGFloat = UIScreen.main.bounds.height * 0.6 - 2 * gifHorizontalOffset
+	private let _availableCellWidth: CGFloat = UIScreen.main.bounds.width - 3 * gifHorizontalOffset
+	private let _availableCellHeight: CGFloat = UIScreen.main.bounds.height * 0.6 - 2 * gifHorizontalOffset
 	
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -119,20 +119,20 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 		var gifViewSize = CGSize(width: -1, height: -1)
 
 		if (gif.width == -1 || gif.height == -1) {
-			gifViewSize = CGSize(width: availableCellWidth,
-										 height: availableCellHeight)
+			gifViewSize = CGSize(width: _availableCellWidth,
+										 height: _availableCellHeight)
 			return (gifViewSize)
 		}
 		
-		if (availableCellWidth * 0.8 * ratio <= availableCellHeight) {
-			gifViewSize.width = availableCellWidth * 0.8
+		if (_availableCellWidth * 0.8 * ratio <= _availableCellHeight) {
+			gifViewSize.width = _availableCellWidth * 0.8
 			gifViewSize.height = gifViewSize.width * ratio
-		} else if (availableCellHeight / ratio <= availableCellWidth * 0.8) {
-			gifViewSize.height = availableCellHeight
+		} else if (_availableCellHeight / ratio <= _availableCellWidth * 0.8) {
+			gifViewSize.height = _availableCellHeight
 			gifViewSize.width = gifViewSize.height / ratio
 		} else {
-			gifViewSize = CGSize(width: availableCellWidth * 0.8,
-										 height: availableCellHeight)
+			gifViewSize = CGSize(width: _availableCellWidth * 0.8,
+										 height: _availableCellHeight)
 		}
 		return (gifViewSize)
 	}

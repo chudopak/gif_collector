@@ -68,18 +68,5 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		// Save changes in the application's managed object context when the application transitions to the background.
 		(UIApplication.shared.delegate as? AppDelegate)?.saveContext()
 	}
-	
-	private func _passManagedObjectContextToViewControllers() {
-		let tabBarController = window!.rootViewController as! TabBar
-		
-		if let tabBarViewControllers = tabBarController.viewControllers {
-			let currentLocationViewController = tabBarViewControllers[0] as! SavedGifsViewController
-			currentLocationViewController.managedObjectContext = managedObjectContext
-			
-			let controller2 = tabBarViewControllers[1] as! RandomGifsViewController
-			controller2.managedObjectContext = managedObjectContext
-		}
-	}
-
 }
 

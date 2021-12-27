@@ -32,8 +32,6 @@ class TabBar: UITabBarController {
 					return (UIColor(red: 0.945, green: 0.894, blue: 0.734, alpha: 1))
 			}
 		}
-
-        // Do any additional setup after loading the view.
     }
 	
 	init(managedObj: NSManagedObjectContext) {
@@ -50,7 +48,6 @@ class TabBar: UITabBarController {
 		
 		let randomGifsVC = RandomGifsViewController(managedObj: managedObjectContext)
 		let savedGifsVC = SavedGifsViewController(managedObj: managedObjectContext)
-
 		
 		randomGifsVC.title = NSLocalizedString("Explore", comment: "")
 		savedGifsVC.title = NSLocalizedString("Saves", comment: "")
@@ -65,7 +62,7 @@ class TabBar: UITabBarController {
 		items[0].image = UIImage(systemName: "star")
 		items[1].image = UIImage(systemName: "magnifyingglass.circle")
    }
-
+	
     /*
     // MARK: - Navigation
 

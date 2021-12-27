@@ -131,9 +131,8 @@ class SaveItemTableViewCell: UITableViewCell {
 		contentView.addSubview(saveGifButton)
 		gifView.addSubview(gifImageView)
 		
-		gifImageView.bounds.size = gifSize
 		gifView.frame = CGRect(x: gifHorizontalOffset,
-							   y: _cellHeight / 2 - gifSize.height / 2,
+							   y: _cellHeight * 0.5 - gifSize.height * 0.5,
 							   width: gifSize.width,
 							   height: gifSize.height)
 		gifImageView.frame = CGRect(x: 0,
@@ -142,7 +141,7 @@ class SaveItemTableViewCell: UITableViewCell {
 									height: gifView.bounds.size.height)
 		
 		saveGifButton.frame = CGRect(x:  UIScreen.main.bounds.width - buttonSidesize - gifHorizontalOffset,
-									 y: _cellHeight / 2 - buttonSidesize / 2,
+									 y: _cellHeight * 0.5 - buttonSidesize * 0.5,
 									 width: buttonSidesize,
 									 height: buttonSidesize)
 		
