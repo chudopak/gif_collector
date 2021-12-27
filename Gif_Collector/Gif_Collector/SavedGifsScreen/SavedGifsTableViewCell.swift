@@ -16,7 +16,7 @@ class SavedGifTableViewCell: UITableViewCell {
 	var gifSize: CGSize!
 	private var _cellHeight: CGFloat = -1
 	
-	private let gifView: UIView = {
+	private let _gifView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: 0,
@@ -35,7 +35,7 @@ class SavedGifTableViewCell: UITableViewCell {
 		return (v)
 	}()
 
-	private let gifImageView: GIFImageView = {
+	private let _gifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.translatesAutoresizingMaskIntoConstraints = false
@@ -77,20 +77,20 @@ class SavedGifTableViewCell: UITableViewCell {
 	public func configureCell() {
 		_cellHeight = gifSize.height + 2 * gifVerticalOffset
 		
-		contentView.addSubview(gifView)
-		gifView.addSubview(gifImageView)
+		contentView.addSubview(_gifView)
+		_gifView.addSubview(_gifImageView)
 		
-		gifImageView.bounds.size = gifSize
-		gifView.frame = CGRect(x: UIScreen.main.bounds.width * 0.5 - gifSize.width * 0.5,
+		_gifImageView.bounds.size = gifSize
+		_gifView.frame = CGRect(x: UIScreen.main.bounds.width * 0.5 - gifSize.width * 0.5,
 							   y: gifVerticalOffset,
 							   width: gifSize.width,
 							   height: gifSize.height)
 		
-		gifImageView.frame = CGRect(x: 0,
+		_gifImageView.frame = CGRect(x: 0,
 									y: 0,
-									width: gifView.bounds.size.width,
-									height: gifView.bounds.size.height)
-		gifImageView.animate(withGIFData: gifData)
+									width: _gifView.bounds.size.width,
+									height: _gifView.bounds.size.height)
+		_gifImageView.animate(withGIFData: gifData)
 	}
 	
 	

@@ -11,7 +11,7 @@ import Gifu
 
 class GifTableViewCell: UITableViewCell {
 	
-	private let leftView: UIView = {
+	private let _leftView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -30,7 +30,7 @@ class GifTableViewCell: UITableViewCell {
 		return (v)
 	}()
 	
-	private let rightView: UIView = {
+	private let _rightView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -49,7 +49,7 @@ class GifTableViewCell: UITableViewCell {
 		return (v)
 	}()
 
-	private let leftGifImageView: GIFImageView = {
+	private let _leftGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -58,7 +58,7 @@ class GifTableViewCell: UITableViewCell {
 		return (image)
 	} ()
 	
-	private let rightGifImageView: GIFImageView = {
+	private let _rightGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -119,79 +119,79 @@ class GifTableViewCell: UITableViewCell {
 								   rightGifSize: gifs?.rightGif.pointSize ?? GifSize(width: -1, height: -1))
 		_setViewsPosition(topBarOffset: topBarOffset)
 		
-		leftView.addSubview(leftGifImageView)
-		rightView.addSubview(rightGifImageView)
+		_leftView.addSubview(_leftGifImageView)
+		_rightView.addSubview(_rightGifImageView)
 
-		contentView.addSubview(rightView)
-		contentView.addSubview(leftView)
+		contentView.addSubview(_rightView)
+		contentView.addSubview(_leftView)
 		if let gifs = gifs {
-			leftGifImageView.animate(withGIFData: gifs.leftGif.gif)
-			rightGifImageView.animate(withGIFData: gifs.rightGif.gif)
+			_leftGifImageView.animate(withGIFData: gifs.leftGif.gif)
+			_rightGifImageView.animate(withGIFData: gifs.rightGif.gif)
 		}
 		else {
 			_resizeViewsForLoadingIndicatorGif()
 
-			leftGifImageView.animate(withGIFNamed: "loadingPNGCircles")
-			rightGifImageView.animate(withGIFNamed: "loadingPNGCircles")
+			_leftGifImageView.animate(withGIFNamed: "loadingPNGCircles")
+			_rightGifImageView.animate(withGIFNamed: "loadingPNGCircles")
 		}
 	}
 	
 	private func _resizeViewsForLoadingIndicatorGif() {
-		leftGifImageView.bounds.size.width = leftGifImageView.bounds.size.width / 2
-		leftGifImageView.bounds.size.height = leftGifImageView.bounds.size.height / 2
-		leftGifImageView.frame.origin = CGPoint(
-			x: leftView.bounds.size.width / 2 - leftGifImageView.bounds.size.width / 2,
-			y: leftView.bounds.size.height / 2 - leftGifImageView.bounds.size.height / 2)
+		_leftGifImageView.bounds.size.width = _leftGifImageView.bounds.size.width / 2
+		_leftGifImageView.bounds.size.height = _leftGifImageView.bounds.size.height / 2
+		_leftGifImageView.frame.origin = CGPoint(
+			x: _leftView.bounds.size.width / 2 - _leftGifImageView.bounds.size.width / 2,
+			y: _leftView.bounds.size.height / 2 - _leftGifImageView.bounds.size.height / 2)
 
-		rightGifImageView.bounds.size.width = rightGifImageView.bounds.size.width / 2
-		rightGifImageView.bounds.size.height = rightGifImageView.bounds.size.height / 2
-		rightGifImageView.frame.origin = CGPoint(
-			x: rightView.bounds.size.width / 2 - rightGifImageView.bounds.size.width / 2,
-			y: rightView.bounds.size.height / 2 - rightGifImageView.bounds.size.height / 2)
+		_rightGifImageView.bounds.size.width = _rightGifImageView.bounds.size.width / 2
+		_rightGifImageView.bounds.size.height = _rightGifImageView.bounds.size.height / 2
+		_rightGifImageView.frame.origin = CGPoint(
+			x: _rightView.bounds.size.width / 2 - _rightGifImageView.bounds.size.width / 2,
+			y: _rightView.bounds.size.height / 2 - _rightGifImageView.bounds.size.height / 2)
 	}
 	
 	private func _setViewsPosition(topBarOffset: CGFloat) {
-		leftView.frame.origin = CGPoint(
+		_leftView.frame.origin = CGPoint(
 				x: gifHorizontalOffset,
-				y: contentView.bounds.size.height / 2 - leftView.bounds.size.height / 2 + topBarOffset / 2)
-		rightView.frame.origin = CGPoint(
-				x: contentView.bounds.size.width - rightView.bounds.size.width - gifHorizontalOffset,
-				y: contentView.bounds.size.height / 2 - rightView.bounds.size.height / 2 + topBarOffset / 2)
-		leftGifImageView.frame.origin = CGPoint(x: 0, y: 0)
-		rightGifImageView.frame.origin = CGPoint(x: 0, y: 0)
+				y: contentView.bounds.size.height / 2 - _leftView.bounds.size.height / 2 + topBarOffset / 2)
+		_rightView.frame.origin = CGPoint(
+				x: contentView.bounds.size.width - _rightView.bounds.size.width - gifHorizontalOffset,
+				y: contentView.bounds.size.height / 2 - _rightView.bounds.size.height / 2 + topBarOffset / 2)
+		_leftGifImageView.frame.origin = CGPoint(x: 0, y: 0)
+		_rightGifImageView.frame.origin = CGPoint(x: 0, y: 0)
 	}
 
 	private func _setViewsSize(leftGifSize: GifSize, rightGifSize: GifSize) {
 		if (leftGifSize.height != -1 && leftGifSize.width != -1 && rightGifSize.height != -1 && rightGifSize.width != -1) {
-			leftView.bounds.size.width = leftGifSize.width
-			leftView.bounds.size.height = leftGifSize.height
-			rightView.bounds.size.width = rightGifSize.width
-			rightView.bounds.size.height = rightGifSize.height
+			_leftView.bounds.size.width = leftGifSize.width
+			_leftView.bounds.size.height = leftGifSize.height
+			_rightView.bounds.size.width = rightGifSize.width
+			_rightView.bounds.size.height = rightGifSize.height
 		}
 		else if (leftGifSize.height != -1 && leftGifSize.width != -1) {
-			rightGifImageView.bounds.size.width = rightGifSize.width
-			rightGifImageView.bounds.size.height = rightGifSize.height
-			leftGifImageView.bounds.size.width = UIScreen.main.bounds.width - 3 * gifHorizontalOffset - rightGifSize.width
-			leftGifImageView.bounds.size.height = rightGifSize.height
+			_rightGifImageView.bounds.size.width = rightGifSize.width
+			_rightGifImageView.bounds.size.height = rightGifSize.height
+			_leftGifImageView.bounds.size.width = UIScreen.main.bounds.width - 3 * gifHorizontalOffset - rightGifSize.width
+			_leftGifImageView.bounds.size.height = rightGifSize.height
 			print("left 0")
 		}
 		else if (rightGifSize.height != -1 && rightGifSize.width != -1) {
-			leftView.bounds.size.width = leftGifSize.width
-			leftView.bounds.size.height = leftGifSize.height
-			rightGifImageView.bounds.size.width = UIScreen.main.bounds.width - 3 * gifHorizontalOffset - leftGifSize.width
-			rightGifImageView.bounds.size.height = leftGifSize.height
+			_leftView.bounds.size.width = leftGifSize.width
+			_leftView.bounds.size.height = leftGifSize.height
+			_rightGifImageView.bounds.size.width = UIScreen.main.bounds.width - 3 * gifHorizontalOffset - leftGifSize.width
+			_rightGifImageView.bounds.size.height = leftGifSize.height
 			print("right 0")
 		}
 		else {
-			leftView.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
-			leftView.bounds.size.height = leftView.bounds.size.width
-			rightView.bounds.size.width = leftView.bounds.size.width
-			rightView.bounds.size.height = leftView.bounds.size.width
+			_leftView.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
+			_leftView.bounds.size.height = _leftView.bounds.size.width
+			_rightView.bounds.size.width = _leftView.bounds.size.width
+			_rightView.bounds.size.height = _leftView.bounds.size.width
 		}
-		leftGifImageView.bounds.size.width = leftView.bounds.size.width
-		leftGifImageView.bounds.size.height = leftView.bounds.size.height
-		rightGifImageView.bounds.size.width = rightView.bounds.size.width
-		rightGifImageView.bounds.size.height = rightView.bounds.size.height
+		_leftGifImageView.bounds.size.width = _leftView.bounds.size.width
+		_leftGifImageView.bounds.size.height = _leftView.bounds.size.height
+		_rightGifImageView.bounds.size.width = _rightView.bounds.size.width
+		_rightGifImageView.bounds.size.height = _rightView.bounds.size.height
 	}
 
 // MARK: - static attributes

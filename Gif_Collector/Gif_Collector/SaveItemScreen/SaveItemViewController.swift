@@ -52,7 +52,7 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 
 	var managedObjectContext: NSManagedObjectContext!
 	
-	private let tableView = UITableView()
+	private let _tableView = UITableView()
 	
 	var firstGif: GifData!
 	var secondGif: GifData!
@@ -72,13 +72,13 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 	}
 	
 	private func _setTableView() {
-		tableView.delegate = self
-		tableView.dataSource = self
-		tableView.separatorColor = .none
-		tableView.separatorStyle = .none
-		tableView.register(SaveItemTableViewCell.self, forCellReuseIdentifier: SaveItemTableViewCell.identifier)
-		view.addSubview(tableView)
-		tableView.backgroundColor = UIColor { tc in
+		_tableView.delegate = self
+		_tableView.dataSource = self
+		_tableView.separatorColor = .none
+		_tableView.separatorStyle = .none
+		_tableView.register(SaveItemTableViewCell.self, forCellReuseIdentifier: SaveItemTableViewCell.identifier)
+		view.addSubview(_tableView)
+		_tableView.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
 				return (darkThemeBackgroundColor)
@@ -89,8 +89,8 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 	}
 	
 	private func _setNavigationBar() {
-		navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(close))
-		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(save))
+		navigationItem.leftBarButtonItem = UIBarButtonItem(title: "Close", style: .plain, target: self, action: #selector(_close))
+		navigationItem.rightBarButtonItem = UIBarButtonItem(title: "Save", style: .plain, target: self, action: #selector(_save))
 		navigationController?.navigationBar.barTintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 				case .dark:
@@ -111,7 +111,7 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		tableView.frame = view.bounds
+		_tableView.frame = view.bounds
 	}
 	
 	private func _countGifViewSize(gif: GifSize) -> CGSize {
@@ -137,11 +137,11 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 		return (gifViewSize)
 	}
 	
-	@objc func close() {
+	@objc private func _close() {
 		dismiss(animated: true, completion: nil)
 	}
 	
-	@objc func save() {
+	@objc private func _save() {
 		let hudView = HudView.hud(inView: navigationController!.view, animated: true)
 		if (_shouldSaveSecond || _shouldSaveFirst) {
 			hudView.isAnythingToSave = true
@@ -179,7 +179,6 @@ class SaveItemViewController: UIViewController, SaveItemViewControllerDelegate {
 				fatalError("Could load data store \(error)")
 			}
 		}
-		
 		
 		DispatchQueue.global().async {
 			DispatchQueue.main.asyncAfter(deadline: .now() + 0.6) {

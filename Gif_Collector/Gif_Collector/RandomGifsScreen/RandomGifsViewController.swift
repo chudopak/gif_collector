@@ -13,9 +13,9 @@ class RandomGifsViewController: UITableViewController {
 
 	var managedObjectContext: NSManagedObjectContext!
 	
-	static private var gifArray = [RowGifsData]()
-	static private var isFirstLoad = true
-	static private var gifArraySize = 0
+	static private var _gifArray = [RowGifsData]()
+	static private var _isFirstLoad = true
+	static private var _gifArraySize = 0
 	
 	private let _semaphoreArray = DispatchSemaphore(value: 1)
 	private let _semaphoreThreads = DispatchSemaphore(value: 2)
@@ -23,10 +23,10 @@ class RandomGifsViewController: UITableViewController {
 	
 	private var _isAllGifsLoaded = true
 	
-	private let parse = ParseJSON()
+	private let _parse = ParseJSON()
 	
-	private var searchTag = ""
-	private var tag = ""
+	private var _searchTag = ""
+	private var _tag = ""
 	
 	lazy var refreshToPull: UIRefreshControl = {
 		var refreshControll = UIRefreshControl()
@@ -60,7 +60,7 @@ class RandomGifsViewController: UITableViewController {
 		return (button)
 	} ()
 
-	private let topBarView: UIView = {
+	private let _topBarView: UIView = {
 		let v = UIView()
 		v.frame = CGRect(x: 0, y: 0, width: UIScreen.main.bounds.width, height: topBarHeight)
 		return (v)
@@ -112,22 +112,22 @@ class RandomGifsViewController: UITableViewController {
 		super.viewDidLoad()
 		_setTableView()
 		_setTopBarView()
-		if (RandomGifsViewController.isFirstLoad) {
+		if (RandomGifsViewController._isFirstLoad) {
 			_semaphoreArray.wait()
-			RandomGifsViewController.gifArray.reserveCapacity(50)
-			RandomGifsViewController.isFirstLoad = false
+			RandomGifsViewController._gifArray.reserveCapacity(50)
+			RandomGifsViewController._isFirstLoad = false
 			_semaphoreArray.signal()
 			_refresh(refreshControlState: false)
 			_semaphoreArray.wait()
-			RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+			RandomGifsViewController._gifArraySize = RandomGifsViewController._gifArray.count
 			_semaphoreArray.signal()
 		}
 	}
 	
 	private func _setTopBarView() {
-		view.addSubview(topBarView)
-		topBarView.addSubview(searchBar)
-		topBarView.addSubview(refreshButton)
+		view.addSubview(_topBarView)
+		_topBarView.addSubview(searchBar)
+		_topBarView.addSubview(refreshButton)
 		searchBar.delegate = self
 		if let textField = searchBar.value(forKey: "searchField") as? UITextField {
 			textField.backgroundColor = UIColor { tc in
@@ -196,7 +196,7 @@ class RandomGifsViewController: UITableViewController {
 			while (true) {
 				usleep(500000)
 				self._semaphoreArray.wait()
-				if (RandomGifsViewController.gifArray.count >= 10 || numberOfChecks >= 60) {
+				if (RandomGifsViewController._gifArray.count >= 10 || numberOfChecks >= 60) {
 					self._semaphoreArray.signal()
 					DispatchQueue.main.async {
 						if (refeshControlState) {
@@ -218,13 +218,13 @@ class RandomGifsViewController: UITableViewController {
 	
 	private func _refresh(refreshControlState: Bool) {
 		_semaphoreArray.wait()
-		RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+		RandomGifsViewController._gifArray.removeAll(keepingCapacity: true)
 		_semaphoreArray.signal()
 		searchBar.resignFirstResponder()
 		searchBar.showsCancelButton = false
 		refreshButton.isEnabled = false
-		searchTag = tag
-		tag = ""
+		_searchTag = _tag
+		_tag = ""
 		_observer(refeshControlState: refreshControlState)
 		_loadFirstGifs()
 	}
@@ -234,11 +234,11 @@ class RandomGifsViewController: UITableViewController {
 			for _ in 0..<10 {
 				self._semaphoreThreads.wait()
 				DispatchQueue.global(qos: .userInitiated).async {
-					guard let leftGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
+					guard let leftGifData = self._parse.getGifData(searchURL: randomGifAPILink + self._searchTag + endLink) else {
 						print("Left gif doesn't load")
 						return
 					}
-					guard let rightGifData = self.parse.getGifData(searchURL: randomGifAPILink + self.searchTag + endLink) else {
+					guard let rightGifData = self._parse.getGifData(searchURL: randomGifAPILink + self._searchTag + endLink) else {
 						print("right gif doesn't load")
 						return
 					}
@@ -246,11 +246,11 @@ class RandomGifsViewController: UITableViewController {
 					let rowGifs = RowGifsData(leftGif: leftGifData, rightGif: rightGifData)
 					
 					self._semaphoreArray.wait()
-					RandomGifsViewController.gifArray.append(rowGifs)
+					RandomGifsViewController._gifArray.append(rowGifs)
 					self._semaphoreArray.signal()
 
 					self._semaphoreArray.wait()
-					RandomGifsViewController.gifArraySize = RandomGifsViewController.gifArray.count
+					RandomGifsViewController._gifArraySize = RandomGifsViewController._gifArray.count
 					self._semaphoreArray.signal()
 					DispatchQueue.main.async {
 						self.tableView.reloadData()
@@ -264,10 +264,10 @@ class RandomGifsViewController: UITableViewController {
 	
 	override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
 		
-		if (RandomGifsViewController.gifArraySize < 8) {
+		if (RandomGifsViewController._gifArraySize < 8) {
 			return (4)
 		}
-		return (RandomGifsViewController.gifArraySize)
+		return (RandomGifsViewController._gifArraySize)
 	}
 	
 	override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -276,13 +276,13 @@ class RandomGifsViewController: UITableViewController {
 		var gifs: RowGifsData?
 		var topBarOffset: CGFloat = 0
 		if (indexPath.row == 0) {
-			topBarOffset = topBarView.bounds.size.height
+			topBarOffset = _topBarView.bounds.size.height
 		}
 		cell.selectionStyle = .none
 
 		_semaphoreArray.wait()
-		if (indexPath.row < RandomGifsViewController.gifArray.count) {
-			gifs = RandomGifsViewController.gifArray[indexPath.row]
+		if (indexPath.row < RandomGifsViewController._gifArray.count) {
+			gifs = RandomGifsViewController._gifArray[indexPath.row]
 		}
 		_semaphoreArray.signal()
 
@@ -294,11 +294,11 @@ class RandomGifsViewController: UITableViewController {
 		var cellHeight: CGFloat = -1
 		var searchBarOffset: CGFloat = 0
 		if (indexPath.row == 0) {
-			searchBarOffset = topBarView.bounds.size.height
+			searchBarOffset = _topBarView.bounds.size.height
 		}
 		_semaphoreArray.wait()
-		if (indexPath.row < RandomGifsViewController.gifArray.count) {
-			cellHeight = RandomGifsViewController.gifArray[indexPath.row].cellHeight
+		if (indexPath.row < RandomGifsViewController._gifArray.count) {
+			cellHeight = RandomGifsViewController._gifArray[indexPath.row].cellHeight
 		}
 		_semaphoreArray.signal()
 		if (cellHeight != -1) {
@@ -310,8 +310,8 @@ class RandomGifsViewController: UITableViewController {
 	override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
 		tableView.deselectRow(at: indexPath, animated: true)
 		_semaphoreArray.wait()
-		if (indexPath.row < RandomGifsViewController.gifArray.count) {
-			let gifs = RandomGifsViewController.gifArray[indexPath.row]
+		if (indexPath.row < RandomGifsViewController._gifArray.count) {
+			let gifs = RandomGifsViewController._gifArray[indexPath.row]
 			_semaphoreArray.signal()
 			let saveItemViewController = SaveItemViewController()
 			
@@ -341,13 +341,13 @@ extension RandomGifsViewController: UISearchBarDelegate {
 		_semaphoreIsAllGifsLoaded.wait()
 		if (_isAllGifsLoaded) {
 			_semaphoreIsAllGifsLoaded.signal()
-			tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
+			_tag = _convertSearchTagToLinkFormat(tag: searchBar.text!)
 			searchBar.text! = ""
 			_semaphoreArray.wait()
-			RandomGifsViewController.gifArray.removeAll(keepingCapacity: true)
+			RandomGifsViewController._gifArray.removeAll(keepingCapacity: true)
 			_semaphoreArray.signal()
 			_refresh(refreshControlState: false)
-			print("Start searching..", searchTag, randomGifAPILink + searchTag + endLink)
+			print("Start searching..", _searchTag, randomGifAPILink + _searchTag + endLink)
 		} else {
 			_semaphoreIsAllGifsLoaded.signal()
 			searchBar.text! = ""

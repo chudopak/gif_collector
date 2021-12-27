@@ -84,7 +84,7 @@ extension SavedGifsViewController: UITableViewDelegate, UITableViewDataSource {
 extension SavedGifsViewController: NSFetchedResultsControllerDelegate {
 	func controllerWillChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 		print("** Controller Will Change Content")
-		tableView.beginUpdates()
+		_tableView.beginUpdates()
 	}
 
 	func controller(_ controller: NSFetchedResultsController<NSFetchRequestResult>, didChange anObject: Any, at indexPath: IndexPath?, for type: NSFetchedResultsChangeType, newIndexPath: IndexPath?) {
@@ -92,19 +92,19 @@ extension SavedGifsViewController: NSFetchedResultsControllerDelegate {
 		switch type {
 		case .insert:
 			print("*** NSFetchedResultsChangeInsert (object)")
-			tableView.insertRows(at: [newIndexPath!], with: .fade)
+			_tableView.insertRows(at: [newIndexPath!], with: .fade)
 
 		case .delete:
 			print("*** NSFetchedResyltsCHengeDelete (object)")
-			tableView.deleteRows(at: [indexPath!], with: .fade)
+			_tableView.deleteRows(at: [indexPath!], with: .fade)
 
 		case .update:
 			print("*** NSFetchedResyltsChengeUpdate (object)")
 
 		case .move:
 			print("*** NSFetchedresultsChangeMove")
-			tableView.deleteRows(at: [indexPath!], with: .fade)
-			tableView.insertRows(at: [newIndexPath!], with: .fade)
+			_tableView.deleteRows(at: [indexPath!], with: .fade)
+			_tableView.insertRows(at: [newIndexPath!], with: .fade)
 
 		@unknown default:
 			fatalError("Unhandled switch case of NSFetchedResyltsChangeType")
@@ -115,11 +115,11 @@ extension SavedGifsViewController: NSFetchedResultsControllerDelegate {
 		switch type {
 		case .insert:
 			print("*** NSFetchedResultsChangeInsert (section)")
-			tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
+			_tableView.insertSections(IndexSet(integer: sectionIndex), with: .fade)
 
 		case .delete:
 			print("*** NSFetchedResultsChangeDelete (section)")
-			tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
+			_tableView.deleteSections(IndexSet(integer: sectionIndex), with: .fade)
 
 		case .update:
 			print("*** NSFetchedResultsChangeUpdate (section)")
@@ -132,7 +132,7 @@ extension SavedGifsViewController: NSFetchedResultsControllerDelegate {
 
 	func controllerDidChangeContent(_ controller: NSFetchedResultsController<NSFetchRequestResult>) {
 		print("*** controllerDidChangeContent")
-		tableView.endUpdates()
+		_tableView.endUpdates()
 	}
 }
 
@@ -159,7 +159,7 @@ class SavedGifsViewController: UIViewController {
 	
 	var managedObjectContext: NSManagedObjectContext!
 	
-	let tableView = UITableView()
+	private let _tableView = UITableView()
 	
 	private lazy var _noItemsLabel: UILabel = {
 		let label = UILabel()
@@ -230,7 +230,7 @@ class SavedGifsViewController: UIViewController {
 									 width: _showRandomGifVCButton.bounds.size.width,
 									 height: _showRandomGifVCButton.bounds.size.height)
 		_performFetch()
-		tableView.backgroundColor = UIColor { tc in
+		_tableView.backgroundColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
 			case .dark:
 				return (UIColor(red: 0.113, green: 0.125, blue: 0.129, alpha: 1))
@@ -238,17 +238,17 @@ class SavedGifsViewController: UIViewController {
 				return (UIColor(red: 0.984, green: 0.941, blue: 0.778, alpha: 1))
 			}
 		}
-		tableView.delegate = self
-		tableView.dataSource = self
-		tableView.separatorColor = .none
-		tableView.separatorStyle = .none
-		tableView.register(SavedGifTableViewCell.self, forCellReuseIdentifier: SavedGifTableViewCell.identifier)
-		view.addSubview(tableView)
+		_tableView.delegate = self
+		_tableView.dataSource = self
+		_tableView.separatorColor = .none
+		_tableView.separatorStyle = .none
+		_tableView.register(SavedGifTableViewCell.self, forCellReuseIdentifier: SavedGifTableViewCell.identifier)
+		view.addSubview(_tableView)
     }
 	
 	override func viewDidLayoutSubviews() {
 		super.viewDidLayoutSubviews()
-		tableView.frame = view.bounds
+		_tableView.frame = view.bounds
 	}
 
 	private func _performFetch() {
