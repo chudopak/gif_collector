@@ -23,17 +23,19 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 		return (container)
 	}()
 	
-	lazy var managedObjectContext: NSManagedObjectContext = self.persistentContainer.viewContext
+	var managedObjectContext: NSManagedObjectContext!
 
 	func scene(_ scene: UIScene, willConnectTo session: UISceneSession, options connectionOptions: UIScene.ConnectionOptions) {
 
 		guard let windowScene = (scene as? UIWindowScene) else { return }
 		
 		self.window = UIWindow(windowScene: windowScene)
-		let tabBar = TabBar()
+
+		managedObjectContext = self.persistentContainer.viewContext
+		let tabBar = TabBar(managedObj: managedObjectContext)
+
 		self.window!.rootViewController = tabBar
 		self.window!.makeKeyAndVisible()
-		_passManagedObjectContextToViewControllers()
 	}
 
 	func sceneDidDisconnect(_ scene: UIScene) {

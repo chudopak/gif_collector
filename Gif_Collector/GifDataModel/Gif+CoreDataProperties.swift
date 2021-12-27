@@ -2,7 +2,7 @@
 //  Gif+CoreDataProperties.swift
 //  
 //
-//  Created by Stepan Kirillov on 12/26/21.
+//  Created by Stepan Kirillov on 12/27/21.
 //
 //
 
@@ -19,5 +19,6 @@ extension Gif {
     @NSManaged public var gifData: Data?
     @NSManaged public var gifPixelHeight: Int32
     @NSManaged public var gifPixelWidth: Int32
+    @NSManaged public var date: Date
 
 }

@@ -10,8 +10,11 @@ import CoreData
 
 class TabBar: UITabBarController {
 	
+	var managedObjectContext: NSManagedObjectContext!
+	
     override func viewDidLoad() {
         super.viewDidLoad()
+		setupViewControllers()
 		UITabBar.appearance().barTintColor = .systemBackground
 		tabBar.tintColor = UIColor { tc in
 			switch tc.userInterfaceStyle {
@@ -29,15 +32,25 @@ class TabBar: UITabBarController {
 					return (UIColor(red: 0.945, green: 0.894, blue: 0.734, alpha: 1))
 			}
 		}
-		setupViewControllers()
 
         // Do any additional setup after loading the view.
     }
 	
+	init(managedObj: NSManagedObjectContext) {
+		managedObjectContext = managedObj
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
 	func setupViewControllers() {
 		
-		let randomGifsVC = RandomGifsViewController()
-		let savedGifsVC = SavedGifsViewController()
+		let randomGifsVC = RandomGifsViewController(managedObj: managedObjectContext)
+		let savedGifsVC = SavedGifsViewController(managedObj: managedObjectContext)
+
 		
 		randomGifsVC.title = NSLocalizedString("Explore", comment: "")
 		savedGifsVC.title = NSLocalizedString("Saves", comment: "")

@@ -2,7 +2,7 @@
 //  Gif+CoreDataClass.swift
 //  
 //
-//  Created by Stepan Kirillov on 12/26/21.
+//  Created by Stepan Kirillov on 12/27/21.
 //
 //
 

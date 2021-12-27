@@ -99,6 +99,15 @@ class RandomGifsViewController: UITableViewController {
 		return (searchBar)
 	} ()
 	
+	init(managedObj: NSManagedObjectContext) {
+		managedObjectContext = managedObj
+		super.init(nibName: nil, bundle: nil)
+	}
+	
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+	}
+	
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		_setTableView()
@@ -305,14 +314,9 @@ class RandomGifsViewController: UITableViewController {
 			let gifs = RandomGifsViewController.gifArray[indexPath.row]
 			_semaphoreArray.signal()
 			let saveItemViewController = SaveItemViewController()
-			if (managedObjectContext != nil) {
-				saveItemViewController.managedObjectContext = managedObjectContext
-			}
-			else {
-				print()
-				print("Bad news")
-				print()
-			}
+			
+			saveItemViewController.managedObjectContext = managedObjectContext
+
 			saveItemViewController.firstGif = gifs.leftGif
 			saveItemViewController.secondGif = gifs.rightGif
 			let navigationController = UINavigationController(rootViewController: saveItemViewController)
