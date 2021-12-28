@@ -11,7 +11,7 @@ import Gifu
 
 class GifTableViewCell: UITableViewCell {
 	
-	private let _leftView: UIView = {
+	private lazy var _leftView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -30,7 +30,7 @@ class GifTableViewCell: UITableViewCell {
 		return (v)
 	}()
 	
-	private let _rightView: UIView = {
+	private lazy var _rightView: UIView = {
 		let v = UIView(frame: CGRect(x: 0,
 									 y: 0,
 									 width: UIScreen.main.bounds.width / 2 - 15,
@@ -49,7 +49,7 @@ class GifTableViewCell: UITableViewCell {
 		return (v)
 	}()
 
-	private let _leftGifImageView: GIFImageView = {
+	private lazy var _leftGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -58,7 +58,7 @@ class GifTableViewCell: UITableViewCell {
 		return (image)
 	} ()
 	
-	private let _rightGifImageView: GIFImageView = {
+	private lazy var _rightGifImageView: GIFImageView = {
 		let image = GIFImageView()
 		image.contentMode = .scaleAspectFill
 		image.bounds.size.width = UIScreen.main.bounds.width / 2 - 15
@@ -67,10 +67,6 @@ class GifTableViewCell: UITableViewCell {
 		image.translatesAutoresizingMaskIntoConstraints = false
 		return (image)
 	} ()
-	
-//	let leftLoadingIndicator = UIActivityIndicatorView(style: .large)
-//	let rightLoadingIndicator = UIActivityIndicatorView(style: .large)
-	
 	
 	override init(style: UITableViewCell.CellStyle, reuseIdentifier: String?) {
 		super.init(style: style, reuseIdentifier: reuseIdentifier)
@@ -82,13 +78,6 @@ class GifTableViewCell: UITableViewCell {
 				return (lightThemeBackgroundColor)
 			}
 		}
-//		if (traitCollection.userInterfaceStyle == .light) {
-//			leftLoadingIndicator.color = lightThemeBackgroundColor
-//			rightLoadingIndicator.color = lightThemeBackgroundColor
-//		} else {
-//			rightLoadingIndicator.color = darkThemeBackgroundColor
-//			leftLoadingIndicator.color = darkThemeBackgroundColor
-//		}
 	}
 	
 	required init?(coder: NSCoder) {
