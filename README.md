@@ -11,6 +11,6 @@ This small app I tried to write without *storyboard* and make colors adjust to s
 
 
 <p align="center">
-	<img src="./largeGif.gif" alt="animated" />
+	<img src="./SuperLargeGif.gif" alt="animated" />
 </p>
 
